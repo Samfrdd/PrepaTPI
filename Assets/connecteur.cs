@@ -23,13 +23,29 @@ public class connecteur : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-      
-        if (other.gameObject.CompareTag("Connecteur")){
-            _connected = "connecte";
-        }else if (other.gameObject.CompareTag("mauvais"))
-        {
-            _connected = "mauvaiseConnection";
+
+        if (gameObject.CompareTag("mauvais")){
+            if (other.gameObject.CompareTag("Connecteur"))
+            {
+                _connected = "mauvaiseConnection";
+            }
+            else if (other.gameObject.CompareTag("mauvais"))
+            {
+                _connected = "connecte";
+            }
         }
+        else
+        {
+            if (other.gameObject.CompareTag("Connecteur"))
+            {
+                _connected = "connecte";
+            }
+            else if (other.gameObject.CompareTag("mauvais"))
+            {
+                _connected = "mauvaiseConnection";
+            }
+        }
+       
     }
 
 

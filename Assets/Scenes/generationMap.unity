@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -198,11 +198,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef951d87308a39c468f8cc197ac60fd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Debug: 0
+  debug: 0
   _lstBlockMaze:
   - {fileID: 7131183442171080694, guid: aa7ed83a163d3524f8a928b5daee8cbc, type: 3}
   - {fileID: 9155621975064018461, guid: a0081b8e0086f844d892f45c82dfcb91, type: 3}
-  - {fileID: 1216902840000221477, guid: 6bfebe0883c356e4baf5b56de9d36083, type: 3}
   - {fileID: 8016794016125995863, guid: 321dc2123e260c04d99a2cbbd9af7d6b, type: 3}
   - {fileID: 8398550198939848211, guid: 145411c0dccd80044beba048cf7f2df1, type: 3}
   _lstRotationBlock:
@@ -215,7 +214,7 @@ MonoBehaviour:
   rows: 10
   columns: 10
   pause: 0
-  AllCollisionDetected: 0
+  allCollisionDetected: 0
   dossierBlocParent: {fileID: 962378303}
   allBlock: []
   allCubeCollision: []

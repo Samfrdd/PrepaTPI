@@ -8,7 +8,7 @@ public class generation : MonoBehaviour
     // Script de génération de la carte
 
     //Bool pour le mode debugage
-    public bool Debug;
+    public bool debug;
 
     private bool _mapCree = false;
 
@@ -21,23 +21,34 @@ public class generation : MonoBehaviour
     private List<float> _lstRotationBlock;
 
     //Taille des blocs 
-    public Vector2 terrainSize = new Vector2(100f, 100f);
-    public Vector2 blockSize = new Vector2(10f, 10f);
+    [SerializeField]
+    private Vector2 terrainSize = new Vector2(100f, 100f);
+
+    [SerializeField]
+    private Vector2 blockSize = new Vector2(10f, 10f);
 
 
     //Nombre de colonne et de ligne pour former notre grille
-    public int rows = 10;
-    public int columns = 10;
+    [SerializeField]
+    private int rows = 10;
+    [SerializeField]
+    private int columns = 10;
+
+    [SerializeField]
+    private bool pause;
+
+    [SerializeField]
+    private bool allCollisionDetected = false;
+    [SerializeField]
+    private Transform dossierBlocParent;
+    [SerializeField]
+    private List<GameObject> allBlock = new List<GameObject>();
+    [SerializeField]
+    private List<GameObject> allCubeCollision;
 
 
-    public bool pause;
-  
-    public bool AllCollisionDetected = false;
-    public Transform dossierBlocParent;
-    public List<GameObject> allBlock = new List<GameObject>();
-    public List<GameObject> allCubeCollision;
 
-    public bool MapCree { get => _mapCree; set => _mapCree = value; }
+    public bool MapCree { get => _mapCree; private set => _mapCree = value; }
 
 
 
@@ -103,7 +114,7 @@ public class generation : MonoBehaviour
                         for (int i = 0; i < childCount; i++)
                         {
                             Transform child = block.transform.GetChild(i);
-                            if (child.CompareTag("Connecteur"))
+                            if (child.CompareTag("Connecteur") || child.CompareTag("mauvais"))
                             {
                                 lstConnecteur.Add(child.gameObject);
                             }
@@ -115,17 +126,20 @@ public class generation : MonoBehaviour
                         // On ajoute dans la liste toute les variables pour savoir si le bloc est autorisé a être connecté
                         foreach (GameObject connectedCube in lstConnecteur)
                         {
-                            if (connectedCube.CompareTag("Connecteur"))
+                            if (connectedCube.CompareTag("Connecteur") || connectedCube.CompareTag("mauvais"))
                             {
                                 // On verifie les blocs
-                               
+                     
                                 listString.Add(connectedCube.GetComponent<connecteur>().Connected);
                             }
                             
                         }
 
 
-                        
+
+                        print(listString.Count + " ...");
+
+
                         if (listString.Any(b => b == "connecte") && listString.Any(b => b == "pasConnecte"))
                         {
                             ConnecteurAllFalse = true;
@@ -138,7 +152,7 @@ public class generation : MonoBehaviour
 
                         if(nbTentative > 40)
                         {
-                            ConnecteurAllFalse = true;
+                           // ConnecteurAllFalse = true;
                         }
 
                         // Verifie si le bloc est bien posé 
@@ -172,6 +186,8 @@ public class generation : MonoBehaviour
             }
 
         }
+
+
 
 
         // Détruire tous les gameObject vide de la scene 
