@@ -16,7 +16,9 @@ public class generation : MonoBehaviour
     [SerializeField]
     private List<GameObject> _lstBlockMaze;
     //Liste des rotations possible
-    public List<float> _lstRotationBlock;
+
+    [SerializeField]
+    private List<float> _lstRotationBlock;
 
     //Taille des blocs 
     public Vector2 terrainSize = new Vector2(100f, 100f);
@@ -61,8 +63,8 @@ public class generation : MonoBehaviour
         float startZ = -(terrainSize.y / 2) + (blockSize.y / 2);
 
         GameObject previousBlock = null;
+        int nbTentative = 0;
 
- 
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < columns; col++)
@@ -70,17 +72,18 @@ public class generation : MonoBehaviour
                 bool blockGood = false;
                 while (!blockGood)
                 {
-
+                    nbTentative++;
                     float x = startX + col * blockSize.x;
                     float z = startZ + row * blockSize.y;
                     Vector3 position = new Vector3(x, 0f, z);
                     GameObject block = new GameObject();
                     List<GameObject> lstConnecteur = new List<GameObject>();
+                   
 
                     if (previousBlock != null)
                     {
                         bool ConnecteurAllFalse;
-                        List<bool> listBool = new List<bool>();
+                        List<string> listString = new List<string>();
                         List<string> listStringAllCol = new List<string>();
 
                         // On instancie le nous block qui va être ajouté 
@@ -115,24 +118,26 @@ public class generation : MonoBehaviour
                             if (connectedCube.CompareTag("Connecteur"))
                             {
                                 // On verifie les blocs
-                                print("nom : " + connectedCube.gameObject.name);
-                                 print(connectedCube.GetComponent<connecteur>().Connected + "- -" + block.name);
-                                listBool.Add(connectedCube.GetComponent<connecteur>().Connected);
-                              
+                               
+                                listString.Add(connectedCube.GetComponent<connecteur>().Connected);
                             }
                             
                         }
 
 
                         
-                        if (listBool.Any(b => b == true))
+                        if (listString.Any(b => b == "connecte") && listString.Any(b => b == "pasConnecte"))
                         {
-
-                            ConnecteurAllFalse = false;
+                            ConnecteurAllFalse = true;
                         }
                         else
                         {
 
+                            ConnecteurAllFalse = false;
+                        }
+
+                        if(nbTentative > 40)
+                        {
                             ConnecteurAllFalse = true;
                         }
 
@@ -141,6 +146,7 @@ public class generation : MonoBehaviour
                         {
                             previousBlock = block;
                             blockGood = true;
+                            nbTentative = 0;
                         }
                         else
                         {
@@ -160,6 +166,7 @@ public class generation : MonoBehaviour
                         previousBlock = block;
                         blockGood = true;
                     }
+                   
 
                 }
             }
@@ -177,6 +184,9 @@ public class generation : MonoBehaviour
                 // Ou utilisez DestroyImmediate(obj) pour une destruction immédiate
             }
         }
+
+
+
 
         // On ajoute dans une liste tous les blocks de la carte
         int nombreEnfants = dossierBlocParent.childCount;

@@ -5,14 +5,14 @@ using UnityEngine;
 public class connecteur : MonoBehaviour
 {
     [SerializeField]
-    private bool _connected;
+    private string _connected;
 
-    public bool Connected { get => _connected; set => _connected = value; }
+    public string Connected { get => _connected; private set => _connected = value; }
 
     // Start is called before the first frame update
     void Start()
     {
-        _connected = false;
+        _connected = "pasConnecte";
     }
 
     // Update is called once per frame
@@ -25,7 +25,10 @@ public class connecteur : MonoBehaviour
     {
       
         if (other.gameObject.CompareTag("Connecteur")){
-            _connected = true;
+            _connected = "connecte";
+        }else if (other.gameObject.CompareTag("mauvais"))
+        {
+            _connected = "mauvaiseConnection";
         }
     }
 
