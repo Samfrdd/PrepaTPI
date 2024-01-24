@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class generation : MonoBehaviour
 {
@@ -45,12 +46,12 @@ public class generation : MonoBehaviour
     private List<GameObject> allBlock = new List<GameObject>();
     [SerializeField]
     private List<GameObject> allCubeCollision;
-
+    [SerializeField]
+    private List<GameObject> _lstEntre;
 
 
     public bool MapCree { get => _mapCree; private set => _mapCree = value; }
-
-
+    public List<GameObject> LstEntre { get => _lstEntre; set => _lstEntre = value; }
 
     public static generation instance;
 
@@ -120,9 +121,6 @@ public class generation : MonoBehaviour
                             }
                         }
 
-
-
-
                         // On ajoute dans la liste toute les variables pour savoir si le bloc est autorisé a être connecté
                         foreach (GameObject connectedCube in lstConnecteur)
                         {
@@ -135,27 +133,15 @@ public class generation : MonoBehaviour
                             
                         }
 
+                        print(gameObject.name + " " + lstConnecteur.Count + " " + listString.Count);
 
 
-                        print(listString.Count + " ...");
+                        // Test si 1 des connecteurs a une mauvaise connection
+                        ConnecteurAllFalse = TestIfBadConnection(listString);
 
 
-                        if (listString.Any(b => b == "connecte") && listString.Any(b => b == "pasConnecte"))
-                        {
-                            ConnecteurAllFalse = true;
-                        }
-                        else
-                        {
 
-                            ConnecteurAllFalse = false;
-                        }
-
-                        if(nbTentative > 40)
-                        {
-                           // ConnecteurAllFalse = true;
-                        }
-
-                        // Verifie si le bloc est bien posé 
+                        // Verifie le bloc est legit on le pose sinon ou le détruit
                         if (ConnecteurAllFalse)
                         {
                             previousBlock = block;
@@ -179,6 +165,7 @@ public class generation : MonoBehaviour
                         block.name = block.name + "_" + row + "_" + col + " FIRST";
                         previousBlock = block;
                         blockGood = true;
+                        yield return new WaitForSeconds(0.02f);
                     }
                    
 
@@ -213,13 +200,44 @@ public class generation : MonoBehaviour
             allBlock.Add(enfant.gameObject); // Ajoutez l'enfant à la liste.
         }
 
+        for (int i = 0; i < allBlock.Count; i++)
+        {
+            int childCount = allBlock[i].transform.childCount;
 
-  
+            for (int y = 0; y < childCount; y++)
+            {
+                Transform child = allBlock[i].transform.GetChild(y);
+                if (child.CompareTag("Connecteur") || child.CompareTag("mauvais"))
+                {
+                    if(child.GetComponent<connecteur>().Connected == "pasConnecte")
+                    {
+                        LstEntre.Add(child.gameObject);
+                    }
+                    
+                }
+            }
+        }
 
 
         MapCree = true;
         print("La map a été crée !");
     }
-  
-    
+
+    private bool TestIfBadConnection(List<string> listString)
+    {
+        bool ConnecteurAllFalse;
+
+        if (listString.Any(b => b == "mauvaiseConnection"))
+        {
+            ConnecteurAllFalse = false;
+        }
+        else
+        {
+
+            ConnecteurAllFalse = true;
+        }
+
+        return ConnecteurAllFalse;
+    }
+
 }

@@ -7,7 +7,10 @@ public class connecteur : MonoBehaviour
     [SerializeField]
     private string _connected;
 
+    private GameObject _blockConnecte;
+
     public string Connected { get => _connected; private set => _connected = value; }
+    public GameObject BlockConnecte { get => _blockConnecte; set => _blockConnecte = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +42,7 @@ public class connecteur : MonoBehaviour
             if (other.gameObject.CompareTag("Connecteur"))
             {
                 _connected = "connecte";
+                _blockConnecte = other.gameObject;
             }
             else if (other.gameObject.CompareTag("mauvais"))
             {
