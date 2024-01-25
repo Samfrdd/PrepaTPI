@@ -7,7 +7,10 @@ public class connecteur : MonoBehaviour
     [SerializeField]
     private string _connected;
 
+    [SerializeField]
     private GameObject _blockConnecte;
+
+
 
     public string Connected { get => _connected; private set => _connected = value; }
     public GameObject BlockConnecte { get => _blockConnecte; set => _blockConnecte = value; }
@@ -16,6 +19,7 @@ public class connecteur : MonoBehaviour
     void Start()
     {
         _connected = "pasConnecte";
+        _blockConnecte = new GameObject();
     }
 
     // Update is called once per frame
