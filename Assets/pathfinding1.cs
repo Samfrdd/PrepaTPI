@@ -19,7 +19,7 @@ public class pathfinding1 : MonoBehaviour
     {
         if (gameObject.GetComponent<generation>().MapCree)
         {
-            print("Debut de la recherche de pathfinding");
+           
             List<GameObject> listEntre = gameObject.GetComponent<generation>().LstEntre;
 
             

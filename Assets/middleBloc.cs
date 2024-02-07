@@ -9,7 +9,17 @@ public class middleBloc : MonoBehaviour
 
     private bool _alreadyPass;
 
+    private bool canDuplicate = false;
+
+    // ????
+    public List<Transform> _lstClone;
+
+    private GameObject _cloneParent;
+       
     public bool AlreadyPass { get => _alreadyPass;private set => _alreadyPass = value; }
+
+    private GameObject _firstPathfinder;
+   
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +30,10 @@ public class middleBloc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (canDuplicate)
+        {
+            Duplicate();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,42 +42,80 @@ public class middleBloc : MonoBehaviour
         {
             if (!_alreadyPass)
             {
-                  
-                if(other.gameObject.GetComponent<pathfinding2>().Waypoints[other.gameObject.GetComponent<pathfinding2>().Waypoints.Length - 1 ] == _lstExit[0] || other.gameObject.GetComponent<pathfinding2>().Waypoints[other.gameObject.GetComponent<pathfinding2>().Waypoints.Length - 1] == _lstExit[1])
-                {
-                    if(_lstExit.Count == 2)
-                    {
-                        Debug.Log("1 sortie");
-                        if (other.gameObject.GetComponent<pathfinding2>().Waypoints[other.gameObject.GetComponent<pathfinding2>().Waypoints.Length - 1] == _lstExit[0])
-                        {
-                            other.gameObject.GetComponent<pathfinding2>().AddWaypoint(_lstExit[0]);
-                        }
-                        else
-                        {
-                            other.gameObject.GetComponent<pathfinding2>().AddWaypoint(_lstExit[1]);
+                _alreadyPass = true;
+                _firstPathfinder = other.gameObject;
 
-                        }
+                if (_lstExit.Count == 2)
+                {
+                    if (other.gameObject.GetComponent<pathfinding2>().Waypoints.Contains(_lstExit[0].transform))
+                    {
+                        other.gameObject.GetComponent<pathfinding2>().AddWaypoint(_lstExit[1].transform);
+                       
                     }
                     else
                     {
-                        // dupliquer les personnage et crée l'arborésence
-                        Debug.Log("2 if");
+                       
+                         other.gameObject.GetComponent<pathfinding2>().AddWaypoint(_lstExit[0].transform);
+                       
 
                     }
-
-
                 }
                 else
                 {
-                    Debug.Log("1 if");
+                    _alreadyPass = true;
+                    Debug.Log("nb enfant" + _lstExit.Count);
 
-                    // dupliquer les personnage et crée l'arborésence
+                    _cloneParent = other.gameObject;
+                        canDuplicate = false;
+                        // Clonner et les envoyé dans les 3 sorties
+                        for (int i = 0; i < _lstExit.Count; i++)
+                        {
+                            if (!other.gameObject.GetComponent<pathfinding2>().Waypoints.Contains(_lstExit[i].transform))
+                            {
 
+                            _lstClone.Add(_lstExit[i]);
+                               
+                            }
+                        }
+                       canDuplicate = true;        
+                }
+            }
+            else
+            {
+               
+                // Si le partent n'est pas le premier a être venu sur le bloc
+                if(other.gameObject.GetComponent<pathfinding2>().Parent != _firstPathfinder)
+                {
+                    other.gameObject.GetComponent<pathfinding2>().BlockPathfinder();
 
                 }
 
+
             }
+        }
+    }
+
+
+    private void Duplicate()
+    {
+        canDuplicate = false;
+        for (int i = 0; i < _lstClone.Count; i++)
+        {
+            GameObject pathfinderClone = Instantiate(_cloneParent, _cloneParent.transform.position, _cloneParent.transform.rotation);
+
+           // pathfinderClone.transform.parent = _cloneParent.transform;
+
+            pathfinderClone.GetComponent<pathfinding2>().AddWaypoint(_lstClone[i]);
+
+            pathfinderClone.GetComponent<pathfinding2>().SetParent(_cloneParent);
+
+            pathfinderClone.GetComponent<pathfinding2>().ClearListChildren();
+
+
+            _cloneParent.GetComponent<pathfinding2>().AddChildren(pathfinderClone);
 
         }
+
+
     }
 }

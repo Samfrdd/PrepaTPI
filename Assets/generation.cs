@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static Unity.VisualScripting.Metadata;
+using Button = UnityEngine.UI.Button;
 
 public class generation : MonoBehaviour
 {
@@ -16,6 +19,14 @@ public class generation : MonoBehaviour
     //Liste des blocs pour former le terrain
     [SerializeField]
     private List<GameObject> _lstBlockMaze;
+
+    //Liste des blocs pour former le terrain
+    [SerializeField]
+    private GameObject _blockEnter;
+
+    //Liste des blocs pour former le terrain
+    [SerializeField]
+    private GameObject _blockExit;
     //Liste des rotations possible
 
     [SerializeField]
@@ -39,7 +50,19 @@ public class generation : MonoBehaviour
     private bool pause;
 
     [SerializeField]
-    private bool allCollisionDetected = false;
+    private GameObject _btnPrefab;
+
+
+
+
+    public Button _btnRestartGenerator;
+
+
+
+    [SerializeField]
+    private Canvas canvas; // La toile UI sur laquelle placer les boutons
+
+
     [SerializeField]
     private Transform dossierBlocParent;
     [SerializeField]
@@ -49,9 +72,12 @@ public class generation : MonoBehaviour
     [SerializeField]
     private List<GameObject> _lstEntre;
 
+  
+
 
     public bool MapCree { get => _mapCree; private set => _mapCree = value; }
     public List<GameObject> LstEntre { get => _lstEntre; set => _lstEntre = value; }
+    public Button BtnRestartGenerator { get => _btnRestartGenerator; set => _btnRestartGenerator = value; }
 
     public static generation instance;
 
@@ -70,9 +96,15 @@ public class generation : MonoBehaviour
 
     IEnumerator generationMap()
     {
+        BtnRestartGenerator.enabled = false;
+        BtnRestartGenerator.gameObject.SetActive(false);
+
+
         // Position de départ des blocs
         float startX = -(terrainSize.x / 2) + (blockSize.x / 2);
         float startZ = -(terrainSize.y / 2) + (blockSize.y / 2);
+        allBlock = new List<GameObject>();
+        LstEntre = new List<GameObject>();
 
         GameObject previousBlock = null;
         int nbTentative = 0;
@@ -207,7 +239,7 @@ public class generation : MonoBehaviour
             for (int y = 0; y < childCount; y++)
             {
                 Transform child = allBlock[i].transform.GetChild(y);
-                if (child.CompareTag("Connecteur") || child.CompareTag("mauvais"))
+                if (child.CompareTag("Connecteur"))
                 {
                     if(child.GetComponent<connecteur>().Connected == "pasConnecte")
                     {
@@ -220,6 +252,11 @@ public class generation : MonoBehaviour
 
 
         MapCree = true;
+        generateBtnEnter();
+        BtnRestartGenerator.enabled = true;
+        BtnRestartGenerator.gameObject.SetActive(true);
+
+
         print("La map a été crée !");
     }
 
@@ -238,6 +275,85 @@ public class generation : MonoBehaviour
         }
 
         return ConnecteurAllFalse;
+    }
+
+    public void generateBtnEnter()
+    {
+
+        int index = 0;
+
+
+        // Créer et placer les boutons dynamiquement sur les GameObjects existants
+        foreach (GameObject targetObject in _lstEntre)
+        {
+            index++;
+            // Convertir la position du GameObject en coordonnées d'écran
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(targetObject.transform.position);
+
+            // Instancier le bouton à partir du prefab
+            GameObject buttonGO = Instantiate(_btnPrefab, screenPos, Quaternion.identity, canvas.transform);
+
+            // Définir le parent du bouton
+            buttonGO.transform.SetParent(canvas.transform, false); // Ne pas conserver la rotation et l'échelle du parent
+
+
+
+            Text buttonText = buttonGO.GetComponentInChildren<Text>();
+            if (buttonText != null)
+            {
+                buttonText.text = "N:" + index;
+
+                // Ajuster la taille du bouton pour correspondre à la taille du texte
+                RectTransform buttonRect = buttonGO.GetComponent<RectTransform>();
+                buttonRect.sizeDelta = new Vector2(buttonText.preferredWidth + 20, buttonText.preferredHeight + 20);
+
+            }
+
+            // Accéder au composant Button du bouton et ajouter une fonction à appeler avec un paramètre
+            Button button = buttonGO.GetComponent<Button>();
+            if (button != null)
+            {
+                // Ajouter un écouteur d'événement au bouton avec une méthode à appeler et un paramètre
+
+                button.onClick.AddListener(() => AjouterEntre(targetObject.transform));
+            }
+
+        }
+
+        
+    }
+
+    public void AjouterEntre(Transform entre)
+    {
+        GameObject block;
+        Debug.Log(entre.gameObject.name);
+
+        Vector3 position = entre.position + new Vector3(0,-1,0);
+
+        // Placer le bloc au bonne endroit Nord sud est ouest
+
+        block = Instantiate(_blockEnter, position, Quaternion.identity);
+
+    }
+
+    public void ClearMap()
+    {
+        foreach (Transform child in dossierBlocParent)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void GenerateMapFromSave()
+    {
+
+    }
+
+    public void RestartGeneration()
+    {
+        ClearMap();
+        StartCoroutine(generationMap());
+
     }
 
 }

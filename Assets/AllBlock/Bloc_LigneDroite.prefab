@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connected: 0
+  _blockConnecte: {fileID: 0}
 --- !u!54 &1821677242067138571
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -266,6 +267,7 @@ GameObject:
   - component: {fileID: 1483477253341700117}
   - component: {fileID: 2553401037200068036}
   - component: {fileID: 7601182308379485668}
+  - component: {fileID: 9004129871113867837}
   m_Layer: 0
   m_Name: pointSortie (1)
   m_TagString: Connecteur
@@ -282,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 3284921181269534449}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.5}
+  m_LocalPosition: {x: 0, y: 1, z: 0.475}
   m_LocalScale: {x: 0.1, y: 1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -372,6 +374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connected: 0
+  _blockConnecte: {fileID: 0}
 --- !u!54 &7601182308379485668
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -399,6 +402,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &9004129871113867837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3284921181269534449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec3fc7440aabc904191bb9f8488d5db7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nextPoint: {fileID: 6070131235359211549}
+  _alreadyPass: 0
 --- !u!1 &4945905018038097850
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,6 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connected: 0
+  _blockConnecte: {fileID: 0}
 --- !u!54 &6765794015410551847
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -665,6 +683,8 @@ GameObject:
   - component: {fileID: 8075163041326650660}
   - component: {fileID: 7196618683220202891}
   - component: {fileID: 7745793662022677173}
+  - component: {fileID: 4963164466826549968}
+  - component: {fileID: 4498351178371472098}
   m_Layer: 0
   m_Name: pointSortie
   m_TagString: Connecteur
@@ -681,7 +701,7 @@ Transform:
   m_GameObject: {fileID: 6070131235359211549}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -0.5}
+  m_LocalPosition: {x: 0, y: 1, z: -0.475}
   m_LocalScale: {x: 0.1, y: 1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -771,6 +791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connected: 0
+  _blockConnecte: {fileID: 0}
 --- !u!54 &7745793662022677173
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -798,6 +819,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &4963164466826549968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070131235359211549}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09a9e7ddf8f86e4995c3bdf2d764cf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4498351178371472098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070131235359211549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec3fc7440aabc904191bb9f8488d5db7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nextPoint: {fileID: 3284921181269534449}
+  _alreadyPass: 0
 --- !u!1 &9155621975064018461
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +873,7 @@ Transform:
   m_GameObject: {fileID: 9155621975064018461}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.29, y: -0.1, z: 0}
+  m_LocalPosition: {x: 46.2, y: 0.5, z: 6.9}
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children:

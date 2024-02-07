@@ -19,7 +19,7 @@ public class connecteur : MonoBehaviour
     void Start()
     {
         _connected = "pasConnecte";
-        _blockConnecte = new GameObject();
+        // _blockConnecte = new GameObject();
     }
 
     // Update is called once per frame
