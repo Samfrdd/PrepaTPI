@@ -27,6 +27,13 @@ public class generation : MonoBehaviour
     //Liste des blocs pour former le terrain
     [SerializeField]
     private GameObject _blockExit;
+
+    [SerializeField]
+    private GameObject _blocSensUnique;
+
+
+    [SerializeField]
+    private GameObject _blocFermer;
     //Liste des rotations possible
 
     [SerializeField]
@@ -50,6 +57,12 @@ public class generation : MonoBehaviour
     private bool pause;
 
     [SerializeField]
+    private GameObject _entreChoisi;
+
+    [SerializeField]
+    private GameObject _sortiChoisi;
+
+    [SerializeField]
     private GameObject _btnPrefab;
 
 
@@ -57,7 +70,8 @@ public class generation : MonoBehaviour
 
     public Button _btnRestartGenerator;
 
-
+    [SerializeField]
+    private GameObject textBox;
 
     [SerializeField]
     private Canvas canvas; // La toile UI sur laquelle placer les boutons
@@ -72,7 +86,9 @@ public class generation : MonoBehaviour
     [SerializeField]
     private List<GameObject> _lstEntre;
 
-  
+    [SerializeField]
+    private List<GameObject> _lstAllBlocNotConnected;
+
 
 
     public bool MapCree { get => _mapCree; private set => _mapCree = value; }
@@ -99,6 +115,7 @@ public class generation : MonoBehaviour
         BtnRestartGenerator.enabled = false;
         BtnRestartGenerator.gameObject.SetActive(false);
 
+        textBox.GetComponent<Text>().text = "Génération en cours...";
 
         // Position de départ des blocs
         float startX = -(terrainSize.x / 2) + (blockSize.x / 2);
@@ -165,7 +182,7 @@ public class generation : MonoBehaviour
                             
                         }
 
-                        print(gameObject.name + " " + lstConnecteur.Count + " " + listString.Count);
+                     //   print(gameObject.name + " " + lstConnecteur.Count + " " + listString.Count);
 
 
                         // Test si 1 des connecteurs a une mauvaise connection
@@ -232,23 +249,7 @@ public class generation : MonoBehaviour
             allBlock.Add(enfant.gameObject); // Ajoutez l'enfant à la liste.
         }
 
-        for (int i = 0; i < allBlock.Count; i++)
-        {
-            int childCount = allBlock[i].transform.childCount;
-
-            for (int y = 0; y < childCount; y++)
-            {
-                Transform child = allBlock[i].transform.GetChild(y);
-                if (child.CompareTag("Connecteur"))
-                {
-                    if(child.GetComponent<connecteur>().Connected == "pasConnecte")
-                    {
-                        LstEntre.Add(child.gameObject);
-                    }
-                    
-                }
-            }
-        }
+        GetAllBlocNotConnected();
 
 
         MapCree = true;
@@ -258,6 +259,40 @@ public class generation : MonoBehaviour
 
 
         print("La map a été crée !");
+    }
+
+    public void GetAllBlocNotConnected()
+    {
+        LstEntre.Clear();
+        _lstAllBlocNotConnected.Clear();
+
+        for (int i = 0; i < allBlock.Count; i++)
+        {
+            int childCount = allBlock[i].transform.childCount;
+
+            for (int y = 0; y < childCount; y++)
+            {
+                Transform child = allBlock[i].transform.GetChild(y);
+                if (child.CompareTag("Connecteur"))
+                {
+                    if (child.GetComponent<connecteur>().Connected == "pasConnecte")
+                    {
+                        LstEntre.Add(child.gameObject);
+                        _lstAllBlocNotConnected.Add(child.gameObject);
+
+                    }
+
+                }
+                else if (child.CompareTag("mauvais"))
+                {
+                    if (child.GetComponent<connecteur>().Connected == "pasConnecte")
+                    {
+                        _lstAllBlocNotConnected.Add(child.gameObject);
+                    }
+
+                }
+            }
+        }
     }
 
     private bool TestIfBadConnection(List<string> listString)
@@ -279,6 +314,7 @@ public class generation : MonoBehaviour
 
     public void generateBtnEnter()
     {
+        textBox.GetComponent<Text>().text = "Veuillez sélectionner une entré !";
 
         int index = 0;
 
@@ -317,10 +353,54 @@ public class generation : MonoBehaviour
 
                 button.onClick.AddListener(() => AjouterEntre(targetObject.transform));
             }
+        }       
+    }
 
+    public void GenerateBtnExit()
+    {
+        textBox.GetComponent<Text>().text = "Veuillez sélectionner une sortie !";
+
+        int index = 0;
+
+        List<GameObject> _lstExit = _lstEntre;
+
+        _lstExit.Remove(_entreChoisi);
+
+        // Créer et placer les boutons dynamiquement sur les GameObjects existants
+        foreach (GameObject targetObject in _lstExit)
+        {
+            index++;
+            // Convertir la position du GameObject en coordonnées d'écran
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(targetObject.transform.position);
+
+            // Instancier le bouton à partir du prefab
+            GameObject buttonGO = Instantiate(_btnPrefab, screenPos, Quaternion.identity, canvas.transform);
+
+            // Définir le parent du bouton
+            buttonGO.transform.SetParent(canvas.transform, false); // Ne pas conserver la rotation et l'échelle du parent
+
+
+
+            Text buttonText = buttonGO.GetComponentInChildren<Text>();
+            if (buttonText != null)
+            {
+                buttonText.text = "N:" + index;
+
+                // Ajuster la taille du bouton pour correspondre à la taille du texte
+                RectTransform buttonRect = buttonGO.GetComponent<RectTransform>();
+                buttonRect.sizeDelta = new Vector2(buttonText.preferredWidth + 20, buttonText.preferredHeight + 20);
+
+            }
+
+            // Accéder au composant Button du bouton et ajouter une fonction à appeler avec un paramètre
+            Button button = buttonGO.GetComponent<Button>();
+            if (button != null)
+            {
+                // Ajouter un écouteur d'événement au bouton avec une méthode à appeler et un paramètre
+
+                button.onClick.AddListener(() => AjouterExit(targetObject.transform));
+            }
         }
-
-        
     }
 
     public void AjouterEntre(Transform entre)
@@ -328,11 +408,178 @@ public class generation : MonoBehaviour
         GameObject block;
         Debug.Log(entre.gameObject.name);
 
-        Vector3 position = entre.position + new Vector3(0,-1,0);
 
-        // Placer le bloc au bonne endroit Nord sud est ouest
+        _entreChoisi = entre.gameObject;
+
+          Vector3 position = new Vector3();
+        float rotation = 0f;
+
+        // NE MARCHE PAS POUR LES ANGLES
+
+        
+        if (entre.parent.gameObject.transform.position.z == -45) // SUD
+        {
+            position = entre.position + new Vector3(0, -1, -5);
+            rotation = 180f;
+        }
+        else if(entre.parent.gameObject.transform.position.z == 45) // NORD
+        {
+            position = entre.position + new Vector3(0, -1, 5);
+
+        }
+        else if (entre.parent.gameObject.transform.position.x == 45) // EST
+        {
+            position = entre.position + new Vector3(5, -1, 0);
+            rotation = 90;
+
+        }
+        else if (entre.parent.gameObject.transform.position.x == -45) // OUEST
+        {
+            position = entre.position + new Vector3(-5, -1, 0);
+            rotation = -90;
+
+        }
+
 
         block = Instantiate(_blockEnter, position, Quaternion.identity);
+        block.name = "Entre";
+        block.transform.parent = dossierBlocParent;
+        block.transform.Rotate(0f, rotation, 0f);
+
+
+        RemoveButton();
+        GenerateBtnExit();
+    }
+
+    public void AjouterExit(Transform exit)
+    {
+        GameObject block;
+        Debug.Log(exit.gameObject.name);
+
+        List<GameObject> _lstExit = _lstEntre;
+
+
+        _sortiChoisi = exit.gameObject;
+
+        _lstExit.Remove(_sortiChoisi);
+
+        this._lstEntre = _lstExit;
+
+        Vector3 position = new Vector3();
+        float rotation = 0f;
+
+        // NE MARCHE PAS POUR LES ANGLES
+
+
+        if (exit.parent.gameObject.transform.position.z == -45) // SUD
+        {
+            position = exit.position + new Vector3(0, -1, -5);
+            rotation = 180f;
+        }
+        else if (exit.parent.gameObject.transform.position.z == 45) // NORD
+        {
+            position = exit.position + new Vector3(0, -1, 5);
+
+        }
+        else if (exit.parent.gameObject.transform.position.x == 45) // EST
+        {
+            position = exit.position + new Vector3(5, -1, 0);
+            rotation = 90;
+
+        }
+        else if (exit.parent.gameObject.transform.position.x == -45) // OUEST
+        {
+            position = exit.position + new Vector3(-5, -1, 0);
+            rotation = -90;
+
+        }
+
+
+        block = Instantiate(_blockExit, position, Quaternion.identity);
+        block.transform.parent = dossierBlocParent;
+        block.name = "Sortie";
+        block.transform.Rotate(0f, rotation, 0f);
+
+
+        RemoveButton();
+
+        CompleteMap();
+
+    }
+
+    public void AjouterBlocFermeture(Transform blocNotConnected, GameObject prefab)
+    {
+        GameObject block;
+      
+        Vector3 position = new Vector3();
+        float rotation = 0f;
+
+        // NE MARCHE PAS POUR LES ANGLES
+
+        
+
+        if (blocNotConnected.parent.gameObject.transform.position.z == -45) // SUD
+        {
+            position = blocNotConnected.position + new Vector3(0, -1, -5);
+            rotation = 0;
+        }
+        else if (blocNotConnected.parent.gameObject.transform.position.z == 45) // NORD
+        {
+            position = blocNotConnected.position + new Vector3(0, -1, 5);
+            rotation = 180;
+
+        }
+        else if (blocNotConnected.parent.gameObject.transform.position.x == 45) // EST
+        {
+            position = blocNotConnected.position + new Vector3(5, -1, 0);
+            rotation = -90;
+
+        }
+        else if (blocNotConnected.parent.gameObject.transform.position.x == -45) // OUEST
+        {
+            position = blocNotConnected.position + new Vector3(-5, -1, 0);
+            rotation = +90;
+
+        }
+
+
+        block = Instantiate(prefab, position, Quaternion.identity);
+        block.name = "BlocFermeture";
+        block.transform.parent = dossierBlocParent;
+        block.transform.Rotate(0f, rotation, 0f);
+
+
+ 
+
+    }
+
+    public void CompleteMap()
+    {
+        textBox.GetComponent<Text>().text = "Génération terminer ! ";
+
+
+        GetAllBlocNotConnected();
+
+
+        // ?
+        _lstAllBlocNotConnected.Remove(_sortiChoisi);
+
+
+        for (int i = 0; i < _lstAllBlocNotConnected.Count; i++)
+        {
+            Debug.Log("tag : " + _lstAllBlocNotConnected[i].tag);
+            if (_lstAllBlocNotConnected[i].tag == "mauvais")
+            {
+                Debug.Log("On mets un bloc ferme");
+                AjouterBlocFermeture(_lstAllBlocNotConnected[i].transform, _blocFermer);
+            }
+            else
+            {
+                AjouterBlocFermeture(_lstAllBlocNotConnected[i].transform, _blocSensUnique );
+            }
+                   
+        }
+
 
     }
 
@@ -351,9 +598,30 @@ public class generation : MonoBehaviour
 
     public void RestartGeneration()
     {
+        RemoveButton();
         ClearMap();
         StartCoroutine(generationMap());
 
+    }
+
+    public void RemoveButton()
+    {
+        List<GameObject> objectsWithTag = new List<GameObject>();
+
+        GameObject[] btnObjects = GameObject.FindGameObjectsWithTag("btn");
+        foreach (GameObject btnObject in btnObjects)
+        {
+            objectsWithTag.Add(btnObject);
+        }
+
+        // Détruire chaque objet dans la liste
+        foreach (GameObject obj in objectsWithTag)
+        {
+            Destroy(obj);
+        }
+
+        // Effacer la liste après destruction des objets
+        objectsWithTag.Clear();
     }
 
 }

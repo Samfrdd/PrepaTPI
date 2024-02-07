@@ -9,6 +9,7 @@ TagManager:
   - Connecteur
   - mauvais
   - pathfinder
+  - btn
   layers:
   - Default
   - TransparentFX

@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6915515533635700698}
   m_Layer: 5
   m_Name: btnPrefab
-  m_TagString: Untagged
+  m_TagString: btn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
