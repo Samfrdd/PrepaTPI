@@ -111,7 +111,7 @@ public class middleBloc : MonoBehaviour
 
             pathfinderClone.GetComponent<pathfinding2>().ClearListChildren();
 
-
+            pathfinderClone.GetComponent<pathfinding2>().SetFolderParent(pathfinderClone);
             _cloneParent.GetComponent<pathfinding2>().AddChildren(pathfinderClone);
 
         }

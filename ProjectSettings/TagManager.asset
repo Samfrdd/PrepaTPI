@@ -10,6 +10,8 @@ TagManager:
   - mauvais
   - pathfinder
   - btn
+  - IA
+  - gameManager
   layers:
   - Default
   - TransparentFX

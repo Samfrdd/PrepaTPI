@@ -683,7 +683,6 @@ GameObject:
   - component: {fileID: 8075163041326650660}
   - component: {fileID: 7196618683220202891}
   - component: {fileID: 7745793662022677173}
-  - component: {fileID: 4963164466826549968}
   - component: {fileID: 4498351178371472098}
   m_Layer: 0
   m_Name: pointSortie
@@ -819,18 +818,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &4963164466826549968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6070131235359211549}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d09a9e7ddf8f86e4995c3bdf2d764cf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4498351178371472098
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -66,7 +66,8 @@ public class generation : MonoBehaviour
     private GameObject _btnPrefab;
 
 
-
+    [SerializeField]
+    private Button _btnSave;
 
     public Button _btnRestartGenerator;
 
@@ -114,6 +115,7 @@ public class generation : MonoBehaviour
     {
         BtnRestartGenerator.enabled = false;
         BtnRestartGenerator.gameObject.SetActive(false);
+        _btnSave.gameObject.SetActive(false);
 
         textBox.GetComponent<Text>().text = "Génération en cours...";
 
@@ -252,7 +254,6 @@ public class generation : MonoBehaviour
         GetAllBlocNotConnected();
 
 
-        MapCree = true;
         generateBtnEnter();
         BtnRestartGenerator.enabled = true;
         BtnRestartGenerator.gameObject.SetActive(true);
@@ -516,31 +517,179 @@ public class generation : MonoBehaviour
 
         // NE MARCHE PAS POUR LES ANGLES
 
+        if(blocNotConnected.parent.gameObject.transform.position.z == 45 && blocNotConnected.parent.gameObject.transform.position.x == 45)
+        {
+
+            // Obtenez la position de l'objet et du carré parent dans le référentiel mondial
+            Vector3 objectPosition = blocNotConnected.transform.position;
+            Vector3 parentPosition = blocNotConnected.parent.gameObject.transform.position;
+
+            // Calculez la différence de position entre l'objet et le carré parent
+            Vector3 difference = objectPosition - parentPosition;
+
+            // Calculez l'angle entre le vecteur de différence et l'axe X (droite)
+            float angle = Vector3.SignedAngle(difference, Vector3.right, Vector3.forward);
+
+            // Déterminez la position relative en fonction de l'angle
+            if (angle > -45 && angle <= 45)
+            {
+                Debug.Log("L'objet est à droite du carré parent.");
+                position = blocNotConnected.position + new Vector3(5, -1, 0);
+                rotation = -90;
+            }
+            else if (angle > 45 && angle <= 135)
+            {
+                Debug.Log("L'objet est en haut du carré parent.");
+            }
+            else if (angle > 135 || angle <= -135)
+            {
+                Debug.Log("L'objet est à gauche du carré parent.");
+            }
+            else
+            {
+                Debug.Log("L'objet est en bas du carré parent.");
+                
+                position = blocNotConnected.position + new Vector3(0, -1, 5);
+                rotation = 180;
+            }
+
+        }
+        else if (blocNotConnected.parent.gameObject.transform.position.z == 45 && blocNotConnected.parent.gameObject.transform.position.x == -45)
+        {
+            // Obtenez la position de l'objet et du carré parent dans le référentiel mondial
+            Vector3 objectPosition = blocNotConnected.transform.position;
+            Vector3 parentPosition = blocNotConnected.parent.gameObject.transform.position;
+
+            // Calculez la différence de position entre l'objet et le carré parent
+            Vector3 difference = objectPosition - parentPosition;
+
+            // Calculez l'angle entre le vecteur de différence et l'axe X (droite)
+            float angle = Vector3.SignedAngle(difference, Vector3.right, Vector3.forward);
+
+            // Déterminez la position relative en fonction de l'angle
+            if (angle > -45 && angle <= 45)
+            {
+               
+            }
+            else if (angle > 45 && angle <= 135)
+            {
+                Debug.Log("L'objet est en haut du carré parent.");
+            }
+            else if (angle > 135 || angle <= -135)
+            {
+                position = blocNotConnected.position + new Vector3(-5, -1, 0);
+                rotation = +90;
+            }
+            else
+            {
+                Debug.Log("L'objet est en bas du carré parent.");
+
+                position = blocNotConnected.position + new Vector3(0, -1, 5);
+                rotation = 180;
+            }
+
+        }
+        else if (blocNotConnected.parent.gameObject.transform.position.z == -45 && blocNotConnected.parent.gameObject.transform.position.x == -45)
+        {
+            // Obtenez la position de l'objet et du carré parent dans le référentiel mondial
+            Vector3 objectPosition = blocNotConnected.transform.position;
+            Vector3 parentPosition = blocNotConnected.parent.gameObject.transform.position;
+
+            // Calculez la différence de position entre l'objet et le carré parent
+            Vector3 difference = objectPosition - parentPosition;
+
+            // Calculez l'angle entre le vecteur de différence et l'axe X (droite)
+            float angle = Vector3.SignedAngle(difference, Vector3.right, Vector3.forward);
+
+            // Déterminez la position relative en fonction de l'angle
+            if (angle > -45 && angle <= 45)
+            {
+
+            }
+            else if (angle > 45 && angle <= 135)
+            {
+                Debug.Log("L'objet est en haut du carré parent.");
+                position = blocNotConnected.position + new Vector3(0, -1, -5);
+                rotation = 0;
+            }
+            else if (angle > 135 || angle <= -135)
+            {
+                position = blocNotConnected.position + new Vector3(-5, -1, 0);
+                rotation = +90;
+            }
+            else
+            {
+                Debug.Log("L'objet est en bas du carré parent.");
+                position = blocNotConnected.position + new Vector3(0, -1, -5);
+                rotation = 0;
+
+            }
+        }
+        else if (blocNotConnected.parent.gameObject.transform.position.z == -45 && blocNotConnected.parent.gameObject.transform.position.x == 45)
+        {
+            // Obtenez la position de l'objet et du carré parent dans le référentiel mondial
+            Vector3 objectPosition = blocNotConnected.transform.position;
+            Vector3 parentPosition = blocNotConnected.parent.gameObject.transform.position;
+
+            // Calculez la différence de position entre l'objet et le carré parent
+            Vector3 difference = objectPosition - parentPosition;
+
+            // Calculez l'angle entre le vecteur de différence et l'axe X (droite)
+            float angle = Vector3.SignedAngle(difference, Vector3.right, Vector3.forward);
+
+            // Déterminez la position relative en fonction de l'angle
+            if (angle > -45 && angle <= 45)
+            {
+                position = blocNotConnected.position + new Vector3(5, -1, 0);
+                rotation = -90;
+            }
+            else if (angle > 45 && angle <= 135)
+            {
+                Debug.Log("L'objet est en haut du carré parent.");
+                position = blocNotConnected.position + new Vector3(0, -1, -5);
+                rotation = 0;
+            }
+            else if (angle > 135 || angle <= -135)
+            {
+                position = blocNotConnected.position + new Vector3(-5, -1, 0);
+                rotation = +90;
+            }
+            else
+            {
+                Debug.Log("L'objet est en bas du carré parent.");
+                position = blocNotConnected.position + new Vector3(0, -1, -5);
+                rotation = 0;
+
+            }
+        }
+        else
+        {
+            if (blocNotConnected.parent.gameObject.transform.position.z == -45) // SUD
+            {
+                position = blocNotConnected.position + new Vector3(0, -1, -5);
+                rotation = 0;
+            }
+            else if (blocNotConnected.parent.gameObject.transform.position.z == 45) // NORD
+            {
+                position = blocNotConnected.position + new Vector3(0, -1, 5);
+                rotation = 180;
+
+            }
+            else if (blocNotConnected.parent.gameObject.transform.position.x == 45) // EST
+            {
+                position = blocNotConnected.position + new Vector3(5, -1, 0);
+                rotation = -90;
+
+            }
+            else if (blocNotConnected.parent.gameObject.transform.position.x == -45) // OUEST
+            {
+                position = blocNotConnected.position + new Vector3(-5, -1, 0);
+                rotation = +90;
+
+            }
+        }
+
         
-
-        if (blocNotConnected.parent.gameObject.transform.position.z == -45) // SUD
-        {
-            position = blocNotConnected.position + new Vector3(0, -1, -5);
-            rotation = 0;
-        }
-        else if (blocNotConnected.parent.gameObject.transform.position.z == 45) // NORD
-        {
-            position = blocNotConnected.position + new Vector3(0, -1, 5);
-            rotation = 180;
-
-        }
-        else if (blocNotConnected.parent.gameObject.transform.position.x == 45) // EST
-        {
-            position = blocNotConnected.position + new Vector3(5, -1, 0);
-            rotation = -90;
-
-        }
-        else if (blocNotConnected.parent.gameObject.transform.position.x == -45) // OUEST
-        {
-            position = blocNotConnected.position + new Vector3(-5, -1, 0);
-            rotation = +90;
-
-        }
 
 
         block = Instantiate(prefab, position, Quaternion.identity);
@@ -567,7 +716,7 @@ public class generation : MonoBehaviour
 
         for (int i = 0; i < _lstAllBlocNotConnected.Count; i++)
         {
-            Debug.Log("tag : " + _lstAllBlocNotConnected[i].tag);
+           
             if (_lstAllBlocNotConnected[i].tag == "mauvais")
             {
                 Debug.Log("On mets un bloc ferme");
@@ -579,6 +728,12 @@ public class generation : MonoBehaviour
             }
                    
         }
+
+        Debug.Log("Map termnimé");
+
+        _btnSave.gameObject.SetActive(true);
+
+        MapCree = true;
 
 
     }

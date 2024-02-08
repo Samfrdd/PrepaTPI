@@ -27,11 +27,20 @@ public class pathfinding2 : MonoBehaviour
     [SerializeField]
     private List<Material> _allMaterial;
 
+    [SerializeField]
+    private GameObject _prefabParent;
+
     public List<Transform> Waypoints { get => _waypoints;private set => _waypoints = value; }
     public Transform To { get => _to; private set => _to = value; }
     public bool Blocked { get => _blocked;private set => _blocked = value; }
     public bool Trouve { get => _trouve;private set => _trouve = value; }
     public GameObject Parent { get => _parent; private set => _parent = value; }
+
+
+    private void Start()
+    {
+        _prefabParent = GameObject.FindWithTag("IA");
+    }
 
     void Update()
     {
@@ -39,6 +48,8 @@ public class pathfinding2 : MonoBehaviour
             MoveTowardsWaypoint();
        
     }
+
+   
 
     void MoveTowardsWaypoint()
     {
@@ -104,6 +115,12 @@ public class pathfinding2 : MonoBehaviour
     public void ClearListChildren()
     {
         _allChildren.Clear();
+    }
+
+    public void SetFolderParent(GameObject pathfinder)
+    {
+        pathfinder.transform.parent = _prefabParent.transform;
+
     }
 
     public void CheckIfAllChildrenBlocked()

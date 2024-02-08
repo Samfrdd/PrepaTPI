@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enterrrrrrr : MonoBehaviour
+public class Enter : MonoBehaviour
 {
 
     [SerializeField]
@@ -17,18 +17,14 @@ public class Enterrrrrrr : MonoBehaviour
     [SerializeField]
     private GameObject _prefabParent;
 
-
-
-
-
     private bool isStarted = false;
     // Start is called before the first frame update
 
     void Start()
     {
-        Debug.Log("sadsad");
+        _gameManager = GameObject.FindWithTag("gameManager");
+        _prefabParent = GameObject.FindWithTag("IA");
 
-        _prefabParent = GameObject.FindWithTag("gameManager");
     }
 
     private void Update()
