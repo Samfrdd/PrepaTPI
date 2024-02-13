@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _waypoints: []
-  speed: 15
+  speed: 10
   _allChildren: []
   _to: {fileID: 0}
   _parent: {fileID: 0}

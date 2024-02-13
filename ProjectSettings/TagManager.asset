@@ -12,6 +12,7 @@ TagManager:
   - btn
   - IA
   - gameManager
+  - Bloc
   layers:
   - Default
   - TransparentFX

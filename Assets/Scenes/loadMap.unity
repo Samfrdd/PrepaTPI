@@ -646,6 +646,7 @@ GameObject:
   - component: {fileID: 1223820324}
   - component: {fileID: 1223820325}
   - component: {fileID: 1223820326}
+  - component: {fileID: 1223820327}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: gameManager
@@ -675,7 +676,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223820323}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef951d87308a39c468f8cc197ac60fd3, type: 3}
   m_Name: 
@@ -723,6 +724,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250b9c8238ddae4a997f5695405119d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1223820327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223820323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3c310b5c361a34a9a6704d981cc3e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 1223820326}
+  _lstBlockMaze:
+  - {fileID: 7131183442171080694, guid: aa7ed83a163d3524f8a928b5daee8cbc, type: 3}
+  - {fileID: 6329817584068821223, guid: d0fd059fbbc0e7f459d8f6613cb6cdd1, type: 3}
+  - {fileID: 7370691848056505106, guid: c0fad4bec861dff449cb0dc5e679a56c, type: 3}
+  - {fileID: 7133150325848651210, guid: 75b4971b5a27a0e409d0fb7e8a98cde7, type: 3}
+  - {fileID: 9155621975064018461, guid: a0081b8e0086f844d892f45c82dfcb91, type: 3}
+  - {fileID: 1216902840000221477, guid: 6bfebe0883c356e4baf5b56de9d36083, type: 3}
+  - {fileID: 8016794016125995863, guid: 321dc2123e260c04d99a2cbbd9af7d6b, type: 3}
+  - {fileID: 8398550198939848211, guid: 145411c0dccd80044beba048cf7f2df1, type: 3}
+  folderBlocParent: {fileID: 962378303}
 --- !u!1 &1486075455
 GameObject:
   m_ObjectHideFlags: 0

@@ -996,7 +996,7 @@ GameObject:
   - component: {fileID: 2879800045259633131}
   m_Layer: 0
   m_Name: Bloc_Virage
-  m_TagString: Untagged
+  m_TagString: Bloc
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
