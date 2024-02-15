@@ -63,11 +63,11 @@ public class middleBloc : MonoBehaviour
                 else
                 {
                     _alreadyPass = true;
-                    Debug.Log("nb enfant" + _lstExit.Count);
+                   
 
                     _cloneParent = other.gameObject;
                         canDuplicate = false;
-                        // Clonner et les envoyé dans les 3 sorties
+                        // Clonner et les envoyï¿½ dans les 3 sorties
                         for (int i = 0; i < _lstExit.Count; i++)
                         {
                             if (!other.gameObject.GetComponent<pathfinding2>().Waypoints.Contains(_lstExit[i].transform))
@@ -83,7 +83,7 @@ public class middleBloc : MonoBehaviour
             else
             {
                
-                // Si le partent n'est pas le premier a être venu sur le bloc
+                // Si le partent n'est pas le premier a ï¿½tre venu sur le bloc
                 if(other.gameObject.GetComponent<pathfinding2>().Parent != _firstPathfinder)
                 {
                     other.gameObject.GetComponent<pathfinding2>().BlockPathfinder();

@@ -30,12 +30,18 @@ public class pathfinding2 : MonoBehaviour
     [SerializeField]
     private GameObject _prefabParent;
 
-    public List<Transform> Waypoints { get => _waypoints;private set => _waypoints = value; }
-    public Transform To { get => _to; private set => _to = value; }
-    public bool Blocked { get => _blocked;private set => _blocked = value; }
-    public bool Trouve { get => _trouve;private set => _trouve = value; }
-    public GameObject Parent { get => _parent; private set => _parent = value; }
+    private bool _isOriginal = false;
 
+    private bool _noPathFound = false;
+
+    private bool algoFinished = false;
+
+    public List<Transform> Waypoints { get => _waypoints; private set => _waypoints = value; }
+    public Transform To { get => _to; private set => _to = value; }
+    public bool Blocked { get => _blocked; private set => _blocked = value; }
+    public bool Trouve { get => _trouve; private set => _trouve = value; }
+    public GameObject Parent { get => _parent; private set => _parent = value; }
+    public bool IsOriginal { get => _isOriginal; set => _isOriginal = value; }
 
     private void Start()
     {
@@ -44,39 +50,52 @@ public class pathfinding2 : MonoBehaviour
 
     void Update()
     {
-      
-            MoveTowardsWaypoint();
-       
+
+        MoveTowardsWaypoint();
+
+        if(_isOriginal && _blocked && !_noPathFound){
+            _noPathFound = true;
+            GameObject.FindWithTag("gameManager").GetComponent<generation>().NoPathFound();
+        }
+
+        if(_isOriginal && _trouve && !algoFinished){
+            algoFinished = true;
+            GameObject.FindWithTag("gameManager").GetComponent<generation>().ExitFound();
+        }
+
     }
 
-   
+
 
     void MoveTowardsWaypoint()
     {
-        if(!_blocked) // Si on a pas atteint un sens unique
+        if (!_blocked) // Si on a pas atteint un sens unique
         {
-            Transform targetWaypoint = Waypoints[_waypoints.Count - 1];
-            float step = speed * Time.deltaTime;
+            if (Waypoints.Count > 0)
+            {
+                Transform targetWaypoint = Waypoints[Waypoints.Count - 1];
+                float step = speed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, step);
+            }
 
-            transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, step);
         }
-      
 
-       
+
+
     }
 
     public void AddWaypoint(Transform newWaypoint)
     {
-        // Ajoutez le nouveau waypoint à la liste
+        // Ajoutez le nouveau waypoint ï¿½ la liste
         _waypoints.Add(newWaypoint);
         _to = newWaypoint;
 
-        
+
     }
 
     public void ClearWaypointList()
     {
-       
+
         _waypoints.Clear();
 
     }
@@ -92,7 +111,10 @@ public class pathfinding2 : MonoBehaviour
 
         _blocked = true;
 
-        _parent.GetComponent<pathfinding2>().CheckIfAllChildrenBlocked();
+        if (!IsOriginal)
+        {
+            _parent.GetComponent<pathfinding2>().CheckIfAllChildrenBlocked();
+        }
 
     }
 
@@ -100,7 +122,7 @@ public class pathfinding2 : MonoBehaviour
     {
         _trouve = true;
         gameObject.GetComponent<TrailRenderer>().material = _allMaterial[0];
-        if(Parent != null)
+        if (Parent != null)
         {
             Parent.GetComponent<pathfinding2>().FindExit();
 
@@ -126,21 +148,17 @@ public class pathfinding2 : MonoBehaviour
     public void CheckIfAllChildrenBlocked()
     {
         bool oneIsBloked = true;
-        Debug.Log("On verifie si ils sont tous bloqué");
+
         for (int i = 0; i < _allChildren.Count; i++)
         {
             if (!_allChildren[i].GetComponent<pathfinding2>().Blocked)
             {
                 oneIsBloked = false;
             }
- 
-
         }
 
-        if(oneIsBloked)
+        if (oneIsBloked)
         {
-            Debug.Log("On bloque le parent");
-
             BlockPathfinder();
         }
     }

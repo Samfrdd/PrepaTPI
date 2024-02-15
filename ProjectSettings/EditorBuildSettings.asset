@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/generationMap.unity
     guid: 3975eaf09c562a543873eeb9ed63907d
+  - enabled: 1
+    path: Assets/Scenes/loadMap.unity
+    guid: 1162be57f1d10ec49a37fb44781a10db
+  - enabled: 1
+    path: Assets/Scenes/TestGene.unity
+    guid: 96f797d5e35d5e640a6815e8b4a09fdc
   m_configObjects: {}

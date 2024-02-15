@@ -17,16 +17,29 @@ public class loadMap : MonoBehaviour
     [SerializeField]
     private Transform folderBlocParent;
 
-
+    private string nameMap;
 
     //manager.instance.LoadMap("Map_20240213144955.xml");
 
     private void Start()
     {
 
-        MapData _mapToLoad = manager.LoadMap("Map_20240213161326");
+        if (PlayerPrefs.HasKey("nameMap"))
+        {
+            nameMap = PlayerPrefs.GetString("nameMap"); // Récupérez le paramètre de PlayerPrefs
+            Debug.Log("Paramètre récupéré : " + nameMap);
+            MapData _mapToLoad = manager.LoadMap(nameMap);
+            GenerateMapFromSave(_mapToLoad.blocks);
+            // Faites ce que vous devez faire avec le paramètre
+        }
+        else
+        {
+            Debug.LogWarning("Aucun paramètre trouvé !");
+        }
 
-        GenerateMapFromSave(_mapToLoad.blocks);
+
+
+
     }
 
     public void GenerateMapFromSave(List<BlocData> map)
@@ -45,7 +58,7 @@ public class loadMap : MonoBehaviour
 
             GameObject block = Instantiate(desiredElement, blockData.position, blockData.rotation);
 
-             block.transform.parent = folderBlocParent;
+            block.transform.parent = folderBlocParent;
         }
     }
 

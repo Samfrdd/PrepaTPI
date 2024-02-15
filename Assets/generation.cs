@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -69,6 +70,8 @@ public class generation : MonoBehaviour
     private GameObject _btnPrefab; // prefab du button
     [SerializeField]
     private Button _btnSave; // Btn save qui est dans la scene
+    [SerializeField]
+    private Button _btnStart; // Btn qui permet de lancer le pathfinder
     public Button _btnRestartGenerator; // Btn regénerer qui est dans la scene
     [SerializeField]
     private GameObject textBox; // textbox qui est en haut de la scene
@@ -95,11 +98,14 @@ public class generation : MonoBehaviour
 
     IEnumerator generationMap()
     {
+        _btnStart.gameObject.SetActive(false);
         BtnRestartGenerator.enabled = false;
         BtnRestartGenerator.gameObject.SetActive(false);
         _btnSave.gameObject.SetActive(false);
 
-        textBox.GetComponent<Text>().text = "Génération en cours...";
+        SetTexBoxText("Génération en cours...");
+
+
 
         // Position de départ des blocs
         float startX = -(terrainSize.x / 2) + (blockSize.x / 2);
@@ -219,7 +225,7 @@ public class generation : MonoBehaviour
         for (int i = 0; i < nombreEnfants; i++)
         {
             Transform enfant = folderBlocParent.GetChild(i);
-            allBlock.Add(enfant.gameObject); 
+            allBlock.Add(enfant.gameObject);
         }
     }
 
@@ -290,7 +296,9 @@ public class generation : MonoBehaviour
     // Fonctions qui génère tous les boutons pour placer une entre
     public void generateBtnEnter()
     {
-        textBox.GetComponent<Text>().text = "Veuillez sélectionner une entré !";
+        SetTexBoxText("Veuillez sélectionner une entré !");
+
+
         int index = 0;
 
         // Créer et placer les boutons dynamiquement sur les GameObjects existants
@@ -329,12 +337,13 @@ public class generation : MonoBehaviour
     // Fonctions qui génère tous les boutons pour placer une sortie
     public void GenerateBtnExit()
     {
-        textBox.GetComponent<Text>().text = "Veuillez sélectionner une sortie !";
+        SetTexBoxText("Veuillez sélectionner une sortie !");
+
         int index = 0;
         List<GameObject> _lstExit = _lstEntre;
         _lstExit.Remove(_entreChoisi);
 
-      
+
         foreach (GameObject targetObject in _lstExit)
         {
             index++;
@@ -488,21 +497,21 @@ public class generation : MonoBehaviour
             // D�terminez la position relative en fonction de l'angle
             if (angle > -45 && angle <= 45)
             {
-                Debug.Log("L'objet est � droite du carr� parent.");
+                // Debug.Log("L'objet est � droite du carr� parent.");
                 position = blocNotConnected.position + new Vector3(5, -1, 0);
                 rotation = -90;
             }
             else if (angle > 45 && angle <= 135)
             {
-                Debug.Log("L'objet est en haut du carr� parent.");
+                // Debug.Log("L'objet est en haut du carr� parent.");
             }
             else if (angle > 135 || angle <= -135)
             {
-                Debug.Log("L'objet est � gauche du carr� parent.");
+                // Debug.Log("L'objet est � gauche du carr� parent.");
             }
             else
             {
-                Debug.Log("L'objet est en bas du carr� parent.");
+                // Debug.Log("L'objet est en bas du carr� parent.");
 
                 position = blocNotConnected.position + new Vector3(0, -1, 5);
                 rotation = 180;
@@ -528,7 +537,7 @@ public class generation : MonoBehaviour
             }
             else if (angle > 45 && angle <= 135)
             {
-                Debug.Log("L'objet est en haut du carr� parent.");
+                // Debug.Log("L'objet est en haut du carr� parent.");
             }
             else if (angle > 135 || angle <= -135)
             {
@@ -537,7 +546,7 @@ public class generation : MonoBehaviour
             }
             else
             {
-                Debug.Log("L'objet est en bas du carr� parent.");
+                //  Debug.Log("L'objet est en bas du carr� parent.");
 
                 position = blocNotConnected.position + new Vector3(0, -1, 5);
                 rotation = 180;
@@ -563,7 +572,7 @@ public class generation : MonoBehaviour
             }
             else if (angle > 45 && angle <= 135)
             {
-                Debug.Log("L'objet est en haut du carr� parent.");
+                // Debug.Log("L'objet est en haut du carr� parent.");
                 position = blocNotConnected.position + new Vector3(0, -1, -5);
                 rotation = 0;
             }
@@ -574,7 +583,7 @@ public class generation : MonoBehaviour
             }
             else
             {
-                Debug.Log("L'objet est en bas du carr� parent.");
+                // Debug.Log("L'objet est en bas du carr� parent.");
                 position = blocNotConnected.position + new Vector3(0, -1, -5);
                 rotation = 0;
 
@@ -600,7 +609,7 @@ public class generation : MonoBehaviour
             }
             else if (angle > 45 && angle <= 135)
             {
-                Debug.Log("L'objet est en haut du carr� parent.");
+                // Debug.Log("L'objet est en haut du carr� parent.");
                 position = blocNotConnected.position + new Vector3(0, -1, -5);
                 rotation = 0;
             }
@@ -611,7 +620,7 @@ public class generation : MonoBehaviour
             }
             else
             {
-                Debug.Log("L'objet est en bas du carr� parent.");
+                //  Debug.Log("L'objet est en bas du carr� parent.");
                 position = blocNotConnected.position + new Vector3(0, -1, -5);
                 rotation = 0;
 
@@ -652,17 +661,18 @@ public class generation : MonoBehaviour
 
     public void CompleteMap()
     {
-        textBox.GetComponent<Text>().text = "Génération terminer ! ";
+        SetTexBoxText("Génération terminer ! ");
+
 
         GetAllBlocNotConnected();
-    
+
         _lstAllBlocNotConnected.Remove(_sortiChoisi);
 
         for (int i = 0; i < _lstAllBlocNotConnected.Count; i++)
         {
             if (_lstAllBlocNotConnected[i].tag == "mauvais")
             {
-                Debug.Log("On mets un bloc ferme");
+                //  Debug.Log("On mets un bloc ferme");
                 AjouterBlocFermeture(_lstAllBlocNotConnected[i].transform, _blocFermer);
             }
             else
@@ -675,9 +685,17 @@ public class generation : MonoBehaviour
 
         _btnSave.gameObject.SetActive(true);
 
+        SetBtnStart();
+
         MapCree = true;
     }
 
+    public void SetBtnStart()
+    {
+        _btnStart.onClick.RemoveAllListeners();
+        _btnStart.onClick.AddListener(() => GameObject.FindWithTag("Enter").GetComponent<Enter>().StartPathfinder());
+        _btnStart.gameObject.SetActive(true);
+    }
 
     //Fonctions qui efface la carte de la scene
     public void ClearMap()
@@ -691,11 +709,6 @@ public class generation : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
-
-    public void GenerateMapFromSave()
-    {
-
     }
 
 
@@ -727,4 +740,37 @@ public class generation : MonoBehaviour
         objectsWithTag.Clear();
     }
 
+    public void RemoveButtonGeneration()
+    {
+        _btnRestartGenerator.gameObject.SetActive(false);
+    }
+
+    public void RemoveButtonSave()
+    {
+        _btnSave.gameObject.SetActive(false);
+
+    }
+
+    public void RemoveButtonStart()
+    {
+        _btnStart.gameObject.SetActive(false);
+
+    }
+
+    public void SetTexBoxText(string text)
+    {
+        textBox.GetComponent<Text>().text = text;
+
+    }
+
+    public void NoPathFound(){
+        SetTexBoxText("Aucun chemin trouvé !");
+        _btnRestartGenerator.gameObject.SetActive(true);
+    }
+
+
+    public void ExitFound(){
+        SetTexBoxText("Le pathFinder a trouvé la sortie !");
+        _btnRestartGenerator.gameObject.SetActive(true);
+    }
 }

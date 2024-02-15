@@ -41,7 +41,7 @@ public class path : MonoBehaviour
             else
             {
                 other.gameObject.GetComponent<pathfinding2>().BlockPathfinder();
-                Debug.Log("On est deja passé par la");
+
             }
 
         }

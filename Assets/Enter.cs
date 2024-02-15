@@ -29,24 +29,25 @@ public class Enter : MonoBehaviour
 
     private void Update()
     {
-        if(_gameManager.GetComponent<generation>().MapCree == true)
-        {
-            
-            if(!isStarted)
-            {
-                isStarted = true;
-                SpawnPathfinder();
+        
+    }
 
-            }
-        }
+    public void StartPathfinder()
+    {
+        isStarted = true;
+        SpawnPathfinder();
+        _gameManager.GetComponent<generation>().RemoveButtonGeneration();
+        _gameManager.GetComponent<generation>().RemoveButtonSave();
+        _gameManager.GetComponent<generation>().RemoveButtonStart();
+    
     }
     // Update is called once per frame
     public void SpawnPathfinder()
     {
         GameObject pathfinder = Instantiate(_prefabPathfinder, transform.position, transform.rotation);
-
-
         pathfinder.transform.parent = _prefabParent.transform;
+        pathfinder.GetComponent<pathfinding2>().IsOriginal = true;
+
     }
 
     private void OnTriggerEnter(Collider other)

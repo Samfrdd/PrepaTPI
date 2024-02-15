@@ -31,7 +31,7 @@ public class MapManager : MonoBehaviour
 
     public void BtnSaveClicked(string name)
     {
-        Debug.Log("Debut save");
+       
         MapData mapData = new MapData();
         // Ajoutez tous les blocs de la scène à la liste de blocs
         string mapName = GenerateUniqueMapName();
@@ -66,7 +66,7 @@ public class MapManager : MonoBehaviour
     }
     private void AddBlocksToMapData(MapData mapData)
     {
-        Debug.Log("Ajout des blocs");
+       
 
         // Récupérez tous les blocs de la scène
         GameObject[] blocks = GameObject.FindGameObjectsWithTag("Bloc");
@@ -83,13 +83,13 @@ public class MapManager : MonoBehaviour
             mapData.blocks.Add(blockData);
         }
 
-        Debug.Log("nb block add : " + mapData.blocks.Count);
+       
 
     }
 
     public MapData LoadMap(string mapName)
     {
-        string filePath = saveFolderPath + mapName + ".xml";
+        string filePath = saveFolderPath + mapName;
 
         // Vérifier si le fichier existe
         if (!File.Exists(filePath))

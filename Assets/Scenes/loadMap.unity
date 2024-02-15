@@ -193,7 +193,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Relancer \n"
+  m_Text: "G\xE9n\xE9ration\n"
 --- !u!222 &203748316
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -215,12 +215,12 @@ GameObject:
   - component: {fileID: 540732387}
   - component: {fileID: 540732386}
   m_Layer: 5
-  m_Name: Save
+  m_Name: BackToMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &540732385
 RectTransform:
   m_ObjectHideFlags: 0
@@ -238,7 +238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -436, y: -472.64}
+  m_AnchoredPosition: {x: -784, y: 479}
   m_SizeDelta: {x: 296.7448, y: 64.7288}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &540732386
@@ -285,16 +285,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1223820326}
-        m_TargetAssemblyTypeName: MapManager, Assembly-CSharp
-        m_MethodName: BtnSaveClicked
+      - m_Target: {fileID: 1223820328}
+        m_TargetAssemblyTypeName: ManagerScene, Assembly-CSharp
+        m_MethodName: MoveScene
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: map
+          m_StringArgument: Menu_1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &540732387
@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 823840619}
   - component: {fileID: 823840618}
   m_Layer: 5
-  m_Name: Restart
+  m_Name: LancementGeneRation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -418,16 +418,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1223820325}
-        m_TargetAssemblyTypeName: generation, Assembly-CSharp
-        m_MethodName: RestartGeneration
-        m_Mode: 1
+      - m_Target: {fileID: 1223820328}
+        m_TargetAssemblyTypeName: ManagerScene, Assembly-CSharp
+        m_MethodName: MoveScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: TestGene
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &823840619
@@ -647,6 +647,7 @@ GameObject:
   - component: {fileID: 1223820325}
   - component: {fileID: 1223820326}
   - component: {fileID: 1223820327}
+  - component: {fileID: 1223820328}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: gameManager
@@ -747,6 +748,18 @@ MonoBehaviour:
   - {fileID: 8016794016125995863, guid: 321dc2123e260c04d99a2cbbd9af7d6b, type: 3}
   - {fileID: 8398550198939848211, guid: 145411c0dccd80044beba048cf7f2df1, type: 3}
   folderBlocParent: {fileID: 962378303}
+--- !u!114 &1223820328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223820323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87dd41902defbb64180d390b2165c69d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1486075455
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,7 +830,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Sauvegarder
+  m_Text: 'Menu
 
 '
 --- !u!222 &1486075458
