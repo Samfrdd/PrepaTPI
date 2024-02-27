@@ -12,6 +12,8 @@ public class MapManager : MonoBehaviour
 
     private string saveFolderPath; // Chemin où les fichiers seront sauvegardés
 
+    [SerializeField]
+    private ModalWindowSave modalWindow;
 
     public static MapManager instance;
     private void Awake()
@@ -20,24 +22,25 @@ public class MapManager : MonoBehaviour
         saveFolderPath = Application.persistentDataPath + "/Maps/";
     }
 
-    public static MapManager GetInstance(){
-        if(instance != null){
+    public static MapManager GetInstance()
+    {
+        if (instance != null)
+        {
             return instance;
-        }else{
+        }
+        else
+        {
             return new MapManager();
 
         }
     }
 
-    public void BtnSaveClicked(string name)
+    public void BtnSaveClicked()
     {
-       
-        MapData mapData = new MapData();
-        // Ajoutez tous les blocs de la scène à la liste de blocs
-        string mapName = GenerateUniqueMapName();
-        AddBlocksToMapData(mapData);
-        // Sauvegardez la carte
-        SaveMap(mapName, mapData);
+
+        modalWindow.OpenModal();
+
+        
     }
     public void SaveMap(string mapName, MapData mapData)
     {
@@ -58,15 +61,15 @@ public class MapManager : MonoBehaviour
     }
 
 
-    private string GenerateUniqueMapName()
+    public string GenerateUniqueMapName()
     {
         // Générez un nom unique basé sur le timestamp actuel
         string timeStamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         return "Map_" + timeStamp;
     }
-    private void AddBlocksToMapData(MapData mapData)
+    public void AddBlocksToMapData(MapData mapData)
     {
-       
+
 
         // Récupérez tous les blocs de la scène
         GameObject[] blocks = GameObject.FindGameObjectsWithTag("Bloc");
@@ -83,7 +86,7 @@ public class MapManager : MonoBehaviour
             mapData.blocks.Add(blockData);
         }
 
-       
+
 
     }
 

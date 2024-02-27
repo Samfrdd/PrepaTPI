@@ -16,6 +16,8 @@ public class LoadListMapSave : MonoBehaviour
 
     [SerializeField]
     private GameObject _prefabButton;
+
+    private float _contentHeight;
     void Start()
     {
 
@@ -32,7 +34,7 @@ public class LoadListMapSave : MonoBehaviour
             foreach (string fileName in fileNames)
             {
                 // Instancier le bouton à partir du prefab
-                GameObject buttonGO = Instantiate(_prefabButton, new Vector3(0,0,0), Quaternion.identity, _parentFolder.transform);
+                GameObject buttonGO = Instantiate(_prefabButton, new Vector3(0, 0, 0), Quaternion.identity, _parentFolder.transform);
 
                 // D�finir le parent du bouton
                 buttonGO.transform.SetParent(_parentFolder.transform, false); // Ne pas conserver la rotation et l'échelle du parent
@@ -45,20 +47,33 @@ public class LoadListMapSave : MonoBehaviour
                     // Ajuster la taille du bouton pour correspondre à la taille du texte
                     RectTransform buttonRect = buttonGO.GetComponent<RectTransform>();
                     buttonRect.sizeDelta = new Vector2(buttonText.preferredWidth + 20, buttonText.preferredHeight + 20);
+                     _contentHeight += buttonRect.sizeDelta.y + 5;
+
                 }
                 // Acc�der au composant Button du bouton et ajouter une fonction à appeler avec un paramètre
                 Button button = buttonGO.GetComponent<Button>();
                 if (button != null)
                 {
                     // Ajouter un écouteur d'évènement au bouton avec une méthode à appeler et un paramètre
-                    button.onClick.AddListener(() => gameObject.GetComponent<ManagerScene>().LoadScene("LoadMap", Path.GetFileName(fileName)));
+                    button.onClick.AddListener(() => gameObject.GetComponent<ManagerScene>().LoadScene("Scene_Main", Path.GetFileName(fileName)));
                 }
+
+               
             }
+
+            Vector2 currentSize = _parentFolder.GetComponent<RectTransform>().sizeDelta;
+
+            // Modifier la hauteur
+            currentSize.y = _contentHeight;
+
+            // Appliquer la nouvelle taille
+            _parentFolder.GetComponent<RectTransform>().sizeDelta = currentSize;
+        
         }
         else
         {
             Debug.LogError("Le dossier spécifié n'existe pas : " + folderPath);
         }
     }
-    
+
 }

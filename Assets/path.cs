@@ -34,8 +34,6 @@ public class path : MonoBehaviour
                 else
                 {
                     other.gameObject.GetComponent<pathfinding2>().AddWaypoint(_nextPoint.transform);
-              
-
                 }
             }
             else

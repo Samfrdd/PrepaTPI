@@ -36,9 +36,9 @@ public class Enter : MonoBehaviour
     {
         isStarted = true;
         SpawnPathfinder();
-        _gameManager.GetComponent<generation>().RemoveButtonGeneration();
-        _gameManager.GetComponent<generation>().RemoveButtonSave();
-        _gameManager.GetComponent<generation>().RemoveButtonStart();
+        _gameManager.GetComponent<ManagerUI>().RemoveButtonGeneration();
+        _gameManager.GetComponent<ManagerUI>().RemoveButtonSave();
+        _gameManager.GetComponent<ManagerUI>().RemoveButtonStart();
     
     }
     // Update is called once per frame

@@ -7,7 +7,6 @@ public class ManagerScene : MonoBehaviour
 {
     public void LoadScene(string name, string nameMap)
     {
-
         PlayerPrefs.SetString("nameMap", nameMap); // Stockez le paramètre dans PlayerPrefs
         SceneManager.LoadScene(name);
     }

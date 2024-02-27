@@ -46,6 +46,10 @@ public class pathfinding2 : MonoBehaviour
     private void Start()
     {
         _prefabParent = GameObject.FindWithTag("IA");
+        GameObject.FindWithTag("gameManager").GetComponent<ManagerUI>().NbPathfinder++;
+        GameObject.FindWithTag("gameManager").GetComponent<ManagerUI>().UpdateView();
+
+
     }
 
     void Update()
@@ -53,14 +57,16 @@ public class pathfinding2 : MonoBehaviour
 
         MoveTowardsWaypoint();
 
-        if(_isOriginal && _blocked && !_noPathFound){
+        if (_isOriginal && _blocked && !_noPathFound)
+        {
             _noPathFound = true;
-            GameObject.FindWithTag("gameManager").GetComponent<generation>().NoPathFound();
+            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().NoPathFound();
         }
 
-        if(_isOriginal && _trouve && !algoFinished){
+        if (_isOriginal && _trouve && !algoFinished)
+        {
             algoFinished = true;
-            GameObject.FindWithTag("gameManager").GetComponent<generation>().ExitFound();
+            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().ExitFound();
         }
 
     }
@@ -77,11 +83,7 @@ public class pathfinding2 : MonoBehaviour
                 float step = speed * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, step);
             }
-
         }
-
-
-
     }
 
     public void AddWaypoint(Transform newWaypoint)
@@ -108,6 +110,8 @@ public class pathfinding2 : MonoBehaviour
     public void BlockPathfinder()
     {
         gameObject.GetComponent<TrailRenderer>().material = _allMaterial[2];
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+
 
         _blocked = true;
 
