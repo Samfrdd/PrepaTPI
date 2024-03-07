@@ -36,6 +36,9 @@ public class pathfinding2 : MonoBehaviour
 
     private bool algoFinished = false;
 
+
+
+
     public List<Transform> Waypoints { get => _waypoints; private set => _waypoints = value; }
     public Transform To { get => _to; private set => _to = value; }
     public bool Blocked { get => _blocked; private set => _blocked = value; }

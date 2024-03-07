@@ -42,30 +42,30 @@ public class ManagerUI : MonoBehaviour
 
     public void UpdateView()
     {
-        _infoPathfinder.GetComponent<Text>().text = " Nombre de pathfinder : " + _nbPathfinder;
+        InfoPathfinder.GetComponent<Text>().text = " Nombre de pathfinder : " + _nbPathfinder;
 
     }
     public void RemoveButtonGeneration()
     {
-        _btnRestartGenerator.gameObject.SetActive(false);
+        BtnRestartGenerator.gameObject.SetActive(false);
     }
 
     public void ClearInfo()
     {
-        _nbPathfinder = 0;
-        _infoPathfinder.GetComponent<Text>().text = "";
+        NbPathfinder = 0;
+        InfoPathfinder.GetComponent<Text>().text = "";
         UpdateView();
 
     }
     public void RemoveButtonSave()
     {
-        _btnSave.gameObject.SetActive(false);
+        BtnSave.gameObject.SetActive(false);
 
     }
 
     public void RemoveButtonStart()
     {
-        _btnStart.gameObject.SetActive(false);
+        BtnStart.gameObject.SetActive(false);
 
     }
 
@@ -80,8 +80,7 @@ public class ManagerUI : MonoBehaviour
 
     public void SetTexBoxText(string text)
     {
-        _textBox.GetComponent<Text>().text = text;
-
+        TextBox.GetComponent<Text>().text = text;
     }
 
     public void SetBtnStart()

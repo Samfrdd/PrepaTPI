@@ -351,7 +351,7 @@ public class RandomGeneration : MonoBehaviour
                 RectTransform buttonRect = buttonGO.GetComponent<RectTransform>();
                 buttonRect.sizeDelta = new Vector2(buttonText.preferredWidth + 20, buttonText.preferredHeight + 20);
             }
-            // Acc�der au composant Button du bouton et ajouter une fonction à appeler avec un paramètre
+            // Accéder au composant Button du bouton et ajouter une fonction à appeler avec un paramètre
             Button button = buttonGO.GetComponent<Button>();
             if (button != null)
             {
