@@ -48,6 +48,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
+  color: 2
+  valeurBit: 2
 --- !u!1 &3308810342875934836
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,16 +306,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09a9e7ddf8f86e4995c3bdf2d764cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  f: 0
+  r: 0
+  l: 0
+  _state: 
+  distance: 0
+  _blocked: 0
   speed: 5
+  isMoving: 0
   _allChildren: []
   _parent: {fileID: 0}
-  _blocked: 0
+  _currentBloc: {fileID: 0}
   _trouve: 0
   _allMaterial:
   - {fileID: 2100000, guid: 1b2b9f7ed0c884d439e983f4edc2540e, type: 2}
   - {fileID: 2100000, guid: 402df2ca40dc9b9478bd9643c895397e, type: 2}
   - {fileID: 2100000, guid: e9a8cdfb857aaf24fb52963b058d8c2e, type: 2}
   _prefabParent: {fileID: 3308810342875934836}
+  _dossierIA: {fileID: 0}
+  _isOriginal: 0
+  _noPathFound: 0
+  hasDuplicate: 0
+  canDuplicate: 0
   scriptLayerFrontal: {fileID: 7898808879722303422}
   scriptLayerLeft: {fileID: 4150053183108532409}
   scriptLayerRight: {fileID: 2699094009453088761}
@@ -365,6 +379,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
+  color: 1
+  valeurBit: 1
 --- !u!1 &7378056280313242697
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,3 +429,5 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
+  color: 3
+  valeurBit: 4
