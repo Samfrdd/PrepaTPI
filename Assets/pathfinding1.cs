@@ -24,7 +24,7 @@ public class Pathfinding1 : MonoBehaviour
     private bool _blocked = false;
 
     [SerializeField]
-    private float speed = 5f;
+    private float currentSpeed = 5f;
 
     [SerializeField]
     private bool isMoving = false;
@@ -81,6 +81,7 @@ public class Pathfinding1 : MonoBehaviour
 
     private void Start()
     {
+        IsOriginal = false;
         IsMoving = true;
         lastPosition = transform.position;
         distance = 0;
@@ -89,7 +90,7 @@ public class Pathfinding1 : MonoBehaviour
         _blocked = false;
         _dossierIA = GameObject.FindWithTag("IA");
         _state = 0;
-        speed = 0f;
+        currentSpeed = 0f;
 
     }
 
@@ -101,7 +102,11 @@ public class Pathfinding1 : MonoBehaviour
         }
         if (other.gameObject.tag == "pathfinder")
         {
-            other.gameObject.GetComponent<Pathfinding1>().Blocked = true;
+            if (other.gameObject.GetComponent<Pathfinding1>().currentSpeed == 0f)
+            {
+                canDuplicate = false;
+                gameObject.GetComponent<Pathfinding1>().Blocked = true;
+            }
         }
     }
     void FixedUpdate()
@@ -123,7 +128,7 @@ public class Pathfinding1 : MonoBehaviour
 
         if (IsMoving)
         {
-            Move(right, _forward, left);
+            Move();
         }
 
         if (distance > 4)
@@ -169,7 +174,7 @@ public class Pathfinding1 : MonoBehaviour
         }
     }
 
-    public void Move(float right, float _forward, float left)
+    public void Move()
     {
         if (!_blocked) // Si on a pas atteint un sens unique
         {
@@ -180,163 +185,113 @@ public class Pathfinding1 : MonoBehaviour
 
                     if (_currentBloc != null)
                     {
-                        if (!hasDuplicate && canDuplicate)
+                        if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
                         {
-
-
-                            hasDuplicate = true;
                             transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
-                            speed = 0f;
+                            StopMovement();
                             DuplicationForward();
                             DuplicationRight();
                             DuplicateLeft();
-
                         }
                     }
 
                     break;
                 case 1: // Bloqué devant mais droite et gauche libre
-                    if (!hasDuplicate && canDuplicate)
+                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
                     {
-                        hasDuplicate = true;
                         transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
-                        speed = 0f;
+                        StopMovement();
                         DuplicateLeft();
                         DuplicationRight();
                     }
                     break;
                 case 2: // Rien devant et a droite
-
-                    if (_currentBloc.name == "Bloc_Virage")
-                    {
-                        speed = 5f;
-                    }
-                    else
+                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
                     {
 
+                        transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
+                        StopMovement();
 
-                        if (!hasDuplicate && canDuplicate)
-                        {
-
-
-                            hasDuplicate = true;
-                            transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
-                            speed = 0f;
-                            DuplicationForward();
-                            DuplicationRight();
-                        }
+                        DuplicationForward();
+                        DuplicationRight();
                     }
+
                     break;
                 case 3:   // Virage a droite 
-
-                    speed = 0f;
-                    // transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y + 90, transform.rotation.z, 0);
-
-                    transform.Rotate(Vector3.up, 90f);
-
-
+                          // transform.Rotate(Vector3.up, 90f);
+                          // currentSpeed = 5f;
+                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+                    {
+                        StopMovement();
+                        DuplicationRight();
+                    }
                     break;
                 case 4: // Devant et gauche libre
 
-                    if (_currentBloc.name == "Bloc_Virage")
-                    {
-                        speed = 5f;
-                    }
-                    else
+                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
                     {
 
-
-                        if (!hasDuplicate && canDuplicate)
-                        {
-                            hasDuplicate = true;
-                            transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
-                            speed = 0f;
-                            DuplicationForward();
-                            DuplicateLeft();
-                        }
+                        transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
+                        StopMovement();
+                        DuplicationForward();
+                        DuplicateLeft();
                     }
+
                     break;
                 case 5: // Virage gauche
-                    speed = 0f;
+                    // currentSpeed = 5f;
+                    // transform.Rotate(Vector3.up, -90f);
+                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+                    {
+                        StopMovement();
+                        DuplicateLeft();
+                    }
                     break;
                 case 6:  // Rien devant 
-                    speed = 5f;
+                    currentSpeed = 5f;
                     break;
                 case 7: // Bloqué
-                    speed = 0f;
-                    // BlockPathfinder(); Marche :)
+
+                    transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
+                    // BlockPathfinder();
+                    // IsMoving = false;
                     break;
                 default:
                     break;
             }
-
-
-            // if (_forward > 2.5)
-            // {
-            //     if (right > 2.5 && _forward > 5)
-            //     {
-            //         speed = 0f;
-            //         Debug.Log("Duplication droite et tout droit");
-
-            //         if (!hasDuplicate && canDuplicate)
-            //         {
-            //             transform.position = _currentBloc.transform.position;
-
-            //             transform.position = transform.position + new Vector3(0, 1, 0);
-            //             hasDuplicate = true;
-            //             DuplicationForward();
-
-            //         }
-
-            //     }
-            //     else if (left > 2.5 && _forward > 5)
-            //     {
-            //         speed = 0f;
-            //         Debug.Log("Duplication gauche et tout droit");
-            //         transform.position = _currentBloc.transform.position;
-            //         transform.position = transform.position + new Vector3(0, 1, 0);
-            //     }
-            //     else
-            //     {
-            //         speed = 5f;
-            //     }
-            // }
-            // else
-            // {
-            //     // Mur en face
-            //     if (left > 2.5)
-            //     {
-            //         transform.Rotate(Vector3.up, -90f);
-            //         speed = 0f;
-            //     }
-            //     else if (right > 2.5)
-            //     {
-            //         transform.Rotate(Vector3.up, 90f);
-            //         speed = 0f;
-            //     }
-            //     else
-            //     {
-            //         // Bloqué 
-            //         speed = 0f;
-            //     }
-
-            // }
+        }
+        else
+        {
+            StopMovement();
+            canDuplicate = false;
         }
 
-
-
-
-
-
-
-
-        Vector3 movement = Vector3.forward * speed * Time.deltaTime;
+        Vector3 movement = Vector3.forward * currentSpeed * Time.deltaTime;
         transform.Translate(movement);
     }
 
+    public void StopMovement()
+    {
+        currentSpeed = 0f;
+        isMoving = false;
+
+    }
+
+    public bool CheckIfFirstPathfinder()
+    {
+        if (_currentBloc.GetComponent<CheckAlreadyPass>().Pathfinder == this.gameObject)
+        {
+            return true;
+        }
+        else
+        {
+            BlockPathfinder();
+            return false;
+        }
+    }
     public void DuplicationForward()
     {
-
+        hasDuplicate = true;
         Debug.Log(transform.localEulerAngles.y);
 
         Vector3 newPos = transform.position;
@@ -371,6 +326,7 @@ public class Pathfinding1 : MonoBehaviour
 
     public void DuplicationRight()
     {
+        hasDuplicate = true;
 
         Debug.Log(transform.localEulerAngles.y);
 
@@ -408,11 +364,9 @@ public class Pathfinding1 : MonoBehaviour
 
     public void DuplicateLeft()
     {
-
-        Debug.Log(transform.localEulerAngles.y);
+        hasDuplicate = true;
 
         Vector3 newPos = transform.position;
-
 
         if (transform.localEulerAngles.y == 0)
         {
@@ -421,7 +375,6 @@ public class Pathfinding1 : MonoBehaviour
         else if (transform.localEulerAngles.y == 90)
         {
             newPos = transform.position + new Vector3(0, 0, 3f);
-
         }
         else if (transform.localEulerAngles.y == 180)
         {
@@ -443,75 +396,6 @@ public class Pathfinding1 : MonoBehaviour
 
     }
 
-    // public void DuplicPathfinder(int nb, float forward, float left, float right)
-    // {
-    //     Debug.Log("lancement duplication param : " + nb + " " + forward + " " + left + " " + right);
-    //     _blocked = true;
-    //     for (int i = 0; i < nb; i++)
-    //     {
-    //         if (left > 2)
-    //         {
-    //             Vector3 pos = transform.position + new Vector3(-2, 0, 0);
-    //             Debug.Log("new pathfinder direction gauche");
-    //             // dup
-    //             // GameObject pathfinderClone = Instantiate(_prefabParent, pos, transform.rotation);
-    //             // pathfinderClone.transform.Rotate(Vector3.up, -90f);
-
-    //             // pathfinderClone.transform.parent = transform;
-
-    //             // pathfinderClone.GetComponent<Pathfinding1>().SetParent(this.gameObject);
-
-    //             // pathfinderClone.GetComponent<Pathfinding1>().ClearListChildren();
-
-    //             // pathfinderClone.GetComponent<Pathfinding1>().SetFolderParent(pathfinderClone);
-    //             // this.gameObject.GetComponent<Pathfinding1>().AddChildren(pathfinderClone);
-    //             // left = 0;
-    //         }
-    //         else if (right > 2)
-    //         {
-    //             // dup
-    //             Debug.Log("new pathfinder direction droite");
-    //             Vector3 pos = transform.position + new Vector3(0, 0, 0);
-    //             GameObject pathfinderClone = Instantiate(_prefabParent, pos, transform.rotation);
-    //             pathfinderClone.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
-    //             pathfinderClone.transform.Rotate(Vector3.up, 90f);
-    //             pathfinderClone.name = transform.name + i;
-    //             Debug.Log("rot" + pathfinderClone.transform.rotation);
-    //             pathfinderClone.transform.parent = _dossierIA.transform;
-    //             pathfinderClone.GetComponent<Pathfinding1>().SetParent(this.gameObject);
-    //             pathfinderClone.GetComponent<Pathfinding1>().IsMoving = false;
-
-    //             pathfinderClone.GetComponent<Pathfinding1>().ClearListChildren();
-
-    //             pathfinderClone.GetComponent<Pathfinding1>().SetFolderParent(pathfinderClone);
-    //             pathfinderClone.transform.position += new Vector3(3, 0, 0);
-
-    //             right = 0;
-    //         }
-    //         else if (forward > 2)
-    //         {
-    //             Debug.Log("new pathfinder direction devant");
-
-    //             Vector3 pos = transform.position + new Vector3(0, 0, 3);
-
-    //             // dup
-    //             GameObject pathfinderClone = Instantiate(_prefabParent, transform.position, transform.rotation);
-
-
-    //             pathfinderClone.transform.parent = _dossierIA.transform;
-
-    //             pathfinderClone.GetComponent<Pathfinding1>().SetParent(this.gameObject);
-
-    //             pathfinderClone.GetComponent<Pathfinding1>().ClearListChildren();
-
-    //             pathfinderClone.GetComponent<Pathfinding1>().SetFolderParent(pathfinderClone);
-    //             this.gameObject.GetComponent<Pathfinding1>().AddChildren(pathfinderClone);
-
-
-    //             forward = 0;
-    //         }
-    //     }
-    // }
     public void SetParent(GameObject parent)
     {
         this.Parent = parent;

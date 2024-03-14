@@ -30,7 +30,9 @@ public class Exit : MonoBehaviour
 
             other.gameObject.GetComponent<TrailRenderer>().material = _material;
 
-            other.gameObject.GetComponent<pathfinding2>().FindExit();
+            other.gameObject.GetComponent<Pathfinding1>().FindExit();
+            other.gameObject.GetComponent<Pathfinding1>().StopMovement();
+
 
 
 
