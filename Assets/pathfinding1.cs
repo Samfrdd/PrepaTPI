@@ -1,3 +1,11 @@
+/**
+Auteur : Sam Freddi
+Date : 19.03.2024
+Description : Script pathfinding1, script qui se place sur le pathfinder et qui lui permets de se déplacer dans le maze. Il gère également les duplications
+Version 2.0.0
+**/
+
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,25 +17,27 @@ public class Pathfinding1 : MonoBehaviour
 {
 
     [SerializeField]
-    private float f;
+    private float _forward;
     [SerializeField]
-    private float r;
+    private float _right;
     [SerializeField]
-    private float l;
+    private float _left;
 
     [SerializeField]
     private float _state = 0;
     [SerializeField]
-    private float distance = 0;
+    private float _distance = 0;
 
     [SerializeField]
     private bool _blocked = false;
 
     [SerializeField]
-    private float currentSpeed = 5f;
+    private float _speed = 0f;
+    [SerializeField]
+    private float _currentSpeed = 0f;
 
     [SerializeField]
-    private bool isMoving = false;
+    private bool _isMoving = false;
 
     [SerializeField]
     private List<GameObject> _allChildren;
@@ -44,7 +54,7 @@ public class Pathfinding1 : MonoBehaviour
     private List<Material> _allMaterial;
 
     [SerializeField]
-    private GameObject _prefabParent;
+    private GameObject _prefabPathfinder;
 
     [SerializeField]
     private GameObject _dossierIA;
@@ -55,42 +65,66 @@ public class Pathfinding1 : MonoBehaviour
     [SerializeField]
     private bool _noPathFound = false;
 
-    private bool algoFinished = false;
+    private bool _algoFinished = false;
 
     [SerializeField]
-    private bool hasDuplicate = false;
+    private bool _hasDuplicate = false;
 
     [SerializeField]
-    private bool canDuplicate = false;
+    private bool _canDuplicate = false;
+
+    [SerializeField]
+    private bool _blockChangeState = false;
 
 
+    private Vector3 _lastPosition; // Position du GameObject lors de la dernière frame
 
-    private Vector3 lastPosition; // Position du GameObject lors de la dernière frame
+
     [SerializeField]
-    private RayCastScript scriptLayerFrontal;
+    private RayCastScript _scriptLayerFrontal;
     [SerializeField]
-    private RayCastScript scriptLayerLeft;
+    private RayCastScript _scriptLayerLeft;
     [SerializeField]
-    private RayCastScript scriptLayerRight;
+    private RayCastScript _scriptLayerRight;
 
     public bool Blocked { get => _blocked; private set => _blocked = value; }
     public bool Trouve { get => _trouve; private set => _trouve = value; }
     public GameObject Parent { get => _parent; private set => _parent = value; }
-    public bool IsOriginal { get => _isOriginal; set => _isOriginal = value; }
-    public bool IsMoving { get => isMoving; set => isMoving = value; }
+    public bool IsOriginal { get => _isOriginal; private set => _isOriginal = value; }
+    public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
+    public float Forward { get => _forward; private set => _forward = value; }
+    public float Right { get => _right; private set => _right = value; }
+    public float Left { get => _left; private set => _left = value; }
+    public float State { get => _state; private set => _state = value; }
+    public float Distance { get => _distance; private set => _distance = value; }
+    public float Speed { get => _speed; private set => _speed = value; }
+    public float CurrentSpeed { get => _currentSpeed; private set => _currentSpeed = value; }
+    public List<GameObject> AllChildren { get => _allChildren; private set => _allChildren = value; }
+    public GameObject CurrentBloc { get => _currentBloc; private set => _currentBloc = value; }
+    public List<Material> AllMaterial { get => _allMaterial; private set => _allMaterial = value; }
+    public GameObject PrefabPathfinder { get => _prefabPathfinder; private set => _prefabPathfinder = value; }
+    public GameObject DossierIA { get => _dossierIA; private set => _dossierIA = value; }
+    public bool NoPathFound { get => _noPathFound; private set => _noPathFound = value; }
+    public bool AlgoFinished { get => _algoFinished; private set => _algoFinished = value; }
+    public bool HasDuplicate { get => _hasDuplicate; private set => _hasDuplicate = value; }
+    public bool CanDuplicate { get => _canDuplicate; private set => _canDuplicate = value; }
+    public bool BlockChangeState { get => _blockChangeState; private set => _blockChangeState = value; }
+    public Vector3 LastPosition { get => _lastPosition; private set => _lastPosition = value; }
+    public RayCastScript ScriptLayerFrontal { get => _scriptLayerFrontal; private set => _scriptLayerFrontal = value; }
+    public RayCastScript ScriptLayerLeft { get => _scriptLayerLeft; private set => _scriptLayerLeft = value; }
+    public RayCastScript ScriptLayerRight { get => _scriptLayerRight; private set => _scriptLayerRight = value; }
 
     private void Start()
     {
-        IsOriginal = false;
         IsMoving = true;
-        lastPosition = transform.position;
-        distance = 0;
-        canDuplicate = false;
-        hasDuplicate = false;
-        _blocked = false;
-        _dossierIA = GameObject.FindWithTag("IA");
-        _state = 0;
-        currentSpeed = 0f;
+        LastPosition = transform.position;
+        Distance = 0;
+        CanDuplicate = false;
+        HasDuplicate = false;
+        Blocked = false;
+        DossierIA = GameObject.FindWithTag("IA");
+        State = 6;
+        CurrentSpeed = Speed;
 
     }
 
@@ -98,96 +132,99 @@ public class Pathfinding1 : MonoBehaviour
     {
         if (other.gameObject.tag == "Bloc")
         {
-            _currentBloc = other.gameObject;
+            CurrentBloc = other.gameObject;
         }
         if (other.gameObject.tag == "pathfinder")
         {
-            if (other.gameObject.GetComponent<Pathfinding1>().currentSpeed == 0f)
+            if (other.gameObject.GetComponent<Pathfinding1>().CurrentSpeed == 0f)
             {
-                canDuplicate = false;
-                gameObject.GetComponent<Pathfinding1>().Blocked = true;
+                CanDuplicate = false;
+                // gameObject.GetComponent<Pathfinding1>().Blocked = true;
             }
         }
     }
     void FixedUpdate()
     {
-        float right = scriptLayerRight.Distance;
-        float _forward = scriptLayerFrontal.Distance;
-        float left = scriptLayerLeft.Distance;
+        CheckIfFinish();
+        float right = ScriptLayerRight.Distance;
+        float forward = ScriptLayerFrontal.Distance;
+        float left = ScriptLayerLeft.Distance;
 
-        f = _forward;
-        l = left;
-        r = right;
+        Forward = forward;
+        Left = left;
+        Right = right;
 
         // Afficher la distance parcourue
         //  Debug.Log("Distance parcourue : " + distance);
+        if (!BlockChangeState)
+        {
+            CalculterState();
+        }
 
-        CalculterState();
         CalculateDistance();
-        CheckIfFinish();
+
+
+        if (Distance > 4)
+        {
+            CanDuplicate = true;
+            BlockChangeState = false;
+        }
+        else
+        {
+            CanDuplicate = false;
+        }
 
         if (IsMoving)
         {
             Move();
         }
-
-        if (distance > 4)
-        {
-            canDuplicate = true;
-        }
-        else
-        {
-            canDuplicate = false;
-        }
-
-
-
     }
 
     public void CalculterState()
     {
-        _state = f + l + r;
+        State = Forward + Left + Right;
     }
 
     public void CalculateDistance()
     {
-        float distanceFrame = Vector3.Distance(transform.position, lastPosition);
+        float distanceFrame = Vector3.Distance(transform.position, LastPosition);
 
         // Mise à jour de la distance totale parcourue
-        distance += distanceFrame;
+        Distance += distanceFrame;
 
         // Mettre à jour la position précédente pour la prochaine frame
-        lastPosition = transform.position;
+        LastPosition = transform.position;
     }
     public void CheckIfFinish()
     {
-        if (_isOriginal && _blocked && !_noPathFound)
+        if (IsOriginal && _blocked && !NoPathFound)
         {
-            _noPathFound = true;
-            // GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().NoPathFound();
+            NoPathFound = true;
+            BlockPathfinder();
+            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().NoPathFound();
         }
 
-        if (_isOriginal && _trouve && !algoFinished)
+        if (IsOriginal && Trouve && !AlgoFinished)
         {
-            algoFinished = true;
-            // GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().ExitFound();
+            AlgoFinished = true;
+            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().ExitFound();
         }
     }
 
     public void Move()
     {
-        if (!_blocked) // Si on a pas atteint un sens unique
+        if (!Blocked) // Si on a pas atteint un sens unique
         {
 
-            switch (_state)
+            switch (State)
             {
                 case 0:  // Croisement
 
-                    if (_currentBloc != null)
+                    if (CurrentBloc != null)
                     {
-                        if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+                        if (!HasDuplicate && CanDuplicate && CheckIfFirstPathfinder())
                         {
-                            transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
+                            transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
                             StopMovement();
                             DuplicationForward();
                             DuplicationRight();
@@ -197,19 +234,19 @@ public class Pathfinding1 : MonoBehaviour
 
                     break;
                 case 1: // Bloqué devant mais droite et gauche libre
-                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+                    if (!HasDuplicate && CanDuplicate && CheckIfFirstPathfinder())
                     {
-                        transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
+                        transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
                         StopMovement();
                         DuplicateLeft();
                         DuplicationRight();
                     }
                     break;
                 case 2: // Rien devant et a droite
-                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+                    if (!HasDuplicate && CanDuplicate && CheckIfFirstPathfinder())
                     {
 
-                        transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
+                        transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
                         StopMovement();
 
                         DuplicationForward();
@@ -218,20 +255,28 @@ public class Pathfinding1 : MonoBehaviour
 
                     break;
                 case 3:   // Virage a droite 
-                          // transform.Rotate(Vector3.up, 90f);
-                          // currentSpeed = 5f;
-                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+
+
+                    transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
+
+                    if (!HasDuplicate && CanDuplicate && CheckIfFirstPathfinder())
                     {
-                        StopMovement();
-                        DuplicationRight();
+                        BlockChangeState = true;
+                        Distance = 0;
+                        // StopMovement();
+                        // DuplicationRight();
+                        transform.Rotate(Vector3.up, 90f);
+                        CurrentSpeed = Speed;
+                        State = 6;
+
                     }
                     break;
                 case 4: // Devant et gauche libre
 
-                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+                    if (!HasDuplicate && CanDuplicate && CheckIfFirstPathfinder())
                     {
 
-                        transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
+                        transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
                         StopMovement();
                         DuplicationForward();
                         DuplicateLeft();
@@ -239,21 +284,28 @@ public class Pathfinding1 : MonoBehaviour
 
                     break;
                 case 5: // Virage gauche
-                    // currentSpeed = 5f;
-                    // transform.Rotate(Vector3.up, -90f);
-                    if (!hasDuplicate && canDuplicate && CheckIfFirstPathfinder())
+                    transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
+
+                    transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
+
+                    if (!HasDuplicate && CanDuplicate && CheckIfFirstPathfinder())
                     {
-                        StopMovement();
-                        DuplicateLeft();
+                        BlockChangeState = true;
+                        Distance = 0;
+                        transform.Rotate(Vector3.up, -90f);
+                        CurrentSpeed = Speed;
+                        State = 6;
+
                     }
+
                     break;
                 case 6:  // Rien devant 
-                    currentSpeed = 5f;
+                    CurrentSpeed = Speed;
                     break;
                 case 7: // Bloqué
 
-                    transform.position = _currentBloc.transform.position + new Vector3(0, 1, 0);
-                    // BlockPathfinder();
+                    transform.position = CurrentBloc.transform.position + new Vector3(0, 1, 0);
+                    BlockPathfinder();
                     // IsMoving = false;
                     break;
                 default:
@@ -263,23 +315,22 @@ public class Pathfinding1 : MonoBehaviour
         else
         {
             StopMovement();
-            canDuplicate = false;
+            CanDuplicate = false;
         }
 
-        Vector3 movement = Vector3.forward * currentSpeed * Time.deltaTime;
+        Vector3 movement = Vector3.forward * CurrentSpeed * Time.deltaTime;
         transform.Translate(movement);
     }
 
     public void StopMovement()
     {
-        currentSpeed = 0f;
-        isMoving = false;
-
+        CurrentSpeed = 0f;
+        IsMoving = false;
     }
 
     public bool CheckIfFirstPathfinder()
     {
-        if (_currentBloc.GetComponent<CheckAlreadyPass>().Pathfinder == this.gameObject)
+        if (CurrentBloc.GetComponent<CheckAlreadyPass>().Pathfinder == this.gameObject)
         {
             return true;
         }
@@ -291,72 +342,41 @@ public class Pathfinding1 : MonoBehaviour
     }
     public void DuplicationForward()
     {
-        hasDuplicate = true;
-        Debug.Log(transform.localEulerAngles.y);
+        CalculterState();
 
-        Vector3 newPos = transform.position;
-
-        if (transform.localEulerAngles.y == 0)
+        if (Forward != 1)
         {
-            newPos = transform.position + new Vector3(0, 0, 3f);
 
+            HasDuplicate = true;
+
+            Vector3 newPos = transform.position;
+
+            GameObject pathfinderClone = Instantiate(PrefabPathfinder, newPos, transform.rotation);
+            pathfinderClone.GetComponent<Pathfinding1>().BLockChangeState();
+            pathfinderClone.GetComponent<Pathfinding1>().SetState(6);
+            pathfinderClone.GetComponent<Pathfinding1>().SetOriginal(false);
+
+            pathfinderClone.GetComponent<Pathfinding1>().SetParent(this.gameObject);
+            pathfinderClone.GetComponent<Pathfinding1>().ClearListChildren();
+            pathfinderClone.GetComponent<Pathfinding1>().SetFolderParent(pathfinderClone);
+            this.gameObject.GetComponent<Pathfinding1>().AddChildren(pathfinderClone);
         }
-        else if (transform.localEulerAngles.y == 90)
-        {
-            newPos = transform.position + new Vector3(3f, 0, 0f);
-
-        }
-        else if (transform.localEulerAngles.y == 180)
-        {
-            newPos = transform.position + new Vector3(0f, 0, -3f);
-        }
-        else if (transform.localEulerAngles.y == 270)
-        {
-            newPos = transform.position + new Vector3(-3f, 0, 0f);
-        }
-
-        GameObject pathfinderClone = Instantiate(_prefabParent, newPos, transform.rotation);
-
-        pathfinderClone.GetComponent<Pathfinding1>().SetParent(this.gameObject);
-        pathfinderClone.GetComponent<Pathfinding1>().ClearListChildren();
-        pathfinderClone.GetComponent<Pathfinding1>().SetFolderParent(pathfinderClone);
-        this.gameObject.GetComponent<Pathfinding1>().AddChildren(pathfinderClone);
-
     }
 
     public void DuplicationRight()
     {
-        hasDuplicate = true;
-
-        Debug.Log(transform.localEulerAngles.y);
+        HasDuplicate = true;
 
         Vector3 newPos = transform.position;
 
-
-        if (transform.localEulerAngles.y == 0)
-        {
-            newPos = transform.position + new Vector3(3f, 0, 0f);
-        }
-        else if (transform.localEulerAngles.y == 90)
-        {
-            newPos = transform.position + new Vector3(0, 0, -3f);
-
-        }
-        else if (transform.localEulerAngles.y == 180)
-        {
-            newPos = transform.position + new Vector3(-3f, 0, 0f);
-        }
-        else if (transform.localEulerAngles.y == 270)
-        {
-            newPos = transform.position + new Vector3(0f, 0, 3f);
-        }
-
-        GameObject pathfinderClone = Instantiate(_prefabParent, newPos, transform.rotation);
-
+        GameObject pathfinderClone = Instantiate(PrefabPathfinder, newPos, transform.rotation);
+        pathfinderClone.GetComponent<Pathfinding1>().BLockChangeState();
+        pathfinderClone.GetComponent<Pathfinding1>().SetState(6);
         pathfinderClone.GetComponent<Pathfinding1>().SetParent(this.gameObject);
         pathfinderClone.GetComponent<Pathfinding1>().ClearListChildren();
         pathfinderClone.GetComponent<Pathfinding1>().SetFolderParent(pathfinderClone);
         this.gameObject.GetComponent<Pathfinding1>().AddChildren(pathfinderClone);
+        pathfinderClone.GetComponent<Pathfinding1>().SetOriginal(false);
 
         pathfinderClone.transform.Rotate(Vector3.up, 90f);
 
@@ -364,32 +384,19 @@ public class Pathfinding1 : MonoBehaviour
 
     public void DuplicateLeft()
     {
-        hasDuplicate = true;
+        HasDuplicate = true;
 
         Vector3 newPos = transform.position;
 
-        if (transform.localEulerAngles.y == 0)
-        {
-            newPos = transform.position + new Vector3(-3f, 0, 0f);
-        }
-        else if (transform.localEulerAngles.y == 90)
-        {
-            newPos = transform.position + new Vector3(0, 0, 3f);
-        }
-        else if (transform.localEulerAngles.y == 180)
-        {
-            newPos = transform.position + new Vector3(3f, 0, 0f);
-        }
-        else if (transform.localEulerAngles.y == 270)
-        {
-            newPos = transform.position + new Vector3(0f, 0, -3f);
-        }
 
-        GameObject pathfinderClone = Instantiate(_prefabParent, newPos, transform.rotation);
-
+        GameObject pathfinderClone = Instantiate(PrefabPathfinder, newPos, transform.rotation);
+        pathfinderClone.GetComponent<Pathfinding1>().BLockChangeState();
+        pathfinderClone.GetComponent<Pathfinding1>().SetState(6);
         pathfinderClone.GetComponent<Pathfinding1>().SetParent(this.gameObject);
         pathfinderClone.GetComponent<Pathfinding1>().ClearListChildren();
         pathfinderClone.GetComponent<Pathfinding1>().SetFolderParent(pathfinderClone);
+        pathfinderClone.GetComponent<Pathfinding1>().SetOriginal(false);
+
         this.gameObject.GetComponent<Pathfinding1>().AddChildren(pathfinderClone);
 
         pathfinderClone.transform.Rotate(Vector3.up, -90f);
@@ -403,7 +410,7 @@ public class Pathfinding1 : MonoBehaviour
 
     public void BlockPathfinder()
     {
-        gameObject.GetComponent<TrailRenderer>().material = _allMaterial[2];
+        gameObject.GetComponent<TrailRenderer>().material = AllMaterial[2];
         gameObject.GetComponent<MeshRenderer>().enabled = false;
 
 
@@ -411,15 +418,15 @@ public class Pathfinding1 : MonoBehaviour
 
         if (!IsOriginal)
         {
-            _parent.GetComponent<Pathfinding1>().CheckIfAllChildrenBlocked();
+            Parent.GetComponent<Pathfinding1>().CheckIfAllChildrenBlocked();
         }
 
     }
 
     public void FindExit()
     {
-        _trouve = true;
-        gameObject.GetComponent<TrailRenderer>().material = _allMaterial[0];
+        Trouve = true;
+        gameObject.GetComponent<TrailRenderer>().material = AllMaterial[0];
         if (Parent != null)
         {
             Parent.GetComponent<Pathfinding1>().FindExit();
@@ -429,17 +436,17 @@ public class Pathfinding1 : MonoBehaviour
 
     public void AddChildren(GameObject child)
     {
-        _allChildren.Add(child);
+        AllChildren.Add(child);
     }
 
     public void ClearListChildren()
     {
-        _allChildren.Clear();
+        AllChildren.Clear();
     }
 
     public void SetFolderParent(GameObject pathfinder)
     {
-        pathfinder.transform.parent = _dossierIA.transform;
+        pathfinder.transform.parent = DossierIA.transform;
 
     }
 
@@ -447,9 +454,9 @@ public class Pathfinding1 : MonoBehaviour
     {
         bool oneIsBloked = true;
 
-        for (int i = 0; i < _allChildren.Count; i++)
+        for (int i = 0; i < AllChildren.Count; i++)
         {
-            if (!_allChildren[i].GetComponent<Pathfinding1>().Blocked)
+            if (!AllChildren[i].GetComponent<Pathfinding1>().Blocked)
             {
                 oneIsBloked = false;
             }
@@ -459,5 +466,20 @@ public class Pathfinding1 : MonoBehaviour
         {
             BlockPathfinder();
         }
+    }
+
+    public void SetOriginal(bool info)
+    {
+        IsOriginal = info;
+    }
+
+    public void BLockChangeState()
+    {
+        BlockChangeState = true;
+    }
+
+    public void SetState(int state)
+    {
+        State = state;
     }
 }

@@ -21,7 +21,7 @@ public class CheckAlreadyPass : MonoBehaviour
             }
 
             if(IsBlockEnding){
-                other.gameObject.GetComponent<Pathfinding1>().BlockPathfinder();
+               // other.gameObject.GetComponent<Pathfinding1>().BlockPathfinder();
             }
         }
     }

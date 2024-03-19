@@ -693,7 +693,7 @@ public class generation : MonoBehaviour
     public void SetBtnStart()
     {
         _btnStart.onClick.RemoveAllListeners();
-        _btnStart.onClick.AddListener(() => GameObject.FindWithTag("Enter").GetComponent<Enter>().StartPathfinder());
+        _btnStart.onClick.AddListener(() => GameObject.FindWithTag("Enter").GetComponent<Enter2_PathfinderNewDirection>().StartPathfinder());
         _btnStart.gameObject.SetActive(true);
     }
 
