@@ -10,16 +10,20 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
 
-    private string saveFolderPath; // Chemin où les fichiers seront sauvegardés
+    private string _saveFolderPath; // Chemin où les fichiers seront sauvegardés
 
     [SerializeField]
-    private ModalWindowSave modalWindow;
+    private ModalWindowSave _modalWindow;
 
     public static MapManager instance;
+
+    public string SaveFolderPath { get => _saveFolderPath; set => _saveFolderPath = value; }
+    public ModalWindowSave ModalWindow { get => _modalWindow; set => _modalWindow = value; }
+
     private void Awake()
     {
         // Assurez-vous d'appeler get_persistentDataPath dans Awake ou Start
-        saveFolderPath = Application.persistentDataPath + "/Maps/";
+        SaveFolderPath = Application.persistentDataPath + "/Maps/";
     }
 
     public static MapManager GetInstance()
@@ -31,24 +35,23 @@ public class MapManager : MonoBehaviour
         else
         {
             return new MapManager();
-
         }
     }
 
     public void BtnSaveClicked()
     {
 
-        modalWindow.OpenModal();
+        ModalWindow.OpenModal();
 
         
     }
     public void SaveMap(string mapName, MapData mapData)
     {
         // Créer le dossier de sauvegarde s'il n'existe pas
-        if (!Directory.Exists(saveFolderPath))
-            Directory.CreateDirectory(saveFolderPath);
+        if (!Directory.Exists(SaveFolderPath))
+            Directory.CreateDirectory(SaveFolderPath);
 
-        string filePath = saveFolderPath + mapName + ".xml";
+        string filePath = SaveFolderPath + mapName + ".xml";
 
         // Sérialiser les données de la carte en XML
         XmlSerializer serializer = new XmlSerializer(typeof(MapData));
@@ -76,14 +79,10 @@ public class MapManager : MonoBehaviour
         foreach (GameObject blockObject in blocks)
         {
             // Créez un nouvel objet BlockData pour chaque bloc de la scène
-            BlocData blockData = new BlocData
-            {
-                position = blockObject.transform.position,
-                rotation = blockObject.transform.rotation,
-                type = blockObject.name // Adapter en fonction de votre structure de blocs
-            };
+            BlocData blockData = new BlocData(blockObject.transform.position, blockObject.transform.rotation, blockObject.name);
+           
             // Ajoutez le bloc à la liste de blocs de la carte
-            mapData.blocks.Add(blockData);
+            mapData.AddBlockData(blockData);
         }
 
 
@@ -92,7 +91,7 @@ public class MapManager : MonoBehaviour
 
     public MapData LoadMap(string mapName)
     {
-        string filePath = saveFolderPath + mapName;
+        string filePath = SaveFolderPath + mapName;
 
         // Vérifier si le fichier existe
         if (!File.Exists(filePath))

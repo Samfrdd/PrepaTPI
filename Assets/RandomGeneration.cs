@@ -1,3 +1,13 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description. RandomGeneration.cs
+version 1.0
+***********************************************************************
+*/
+
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,29 +24,25 @@ using System.IO;
 using System.Xml.Serialization;
 using Unity.VisualScripting;
 
-
-
-
-
 public class RandomGeneration : MonoBehaviour
 {
     // Script de génération de la carte
     #region variable
-    public bool debug;
+    public bool debug; // VARIBALE 
     private bool _mapCree = false;
     [SerializeField]
-    private bool pause;
+    private bool _pause;
 
     #endregion
 
     #region dossierParent
 
     [SerializeField]
-    private Transform folderBlocParent;
+    private Transform _folderBlocParent;
     [SerializeField]
-    private Transform folderIaParent;
+    private Transform _folderIaParent;
     [SerializeField]
-    private Canvas canvas;
+    private Canvas _canvas;
 
     #endregion
 
@@ -55,18 +61,18 @@ public class RandomGeneration : MonoBehaviour
     [SerializeField]
     private List<float> _lstRotationBlock; //Liste des rotations possible
     [SerializeField]
-    private Vector2 terrainSize = new Vector2(100f, 100f); // Taille du terrain
+    private Vector2 _terrainSize = new Vector2(100f, 100f); // Taille du terrain
     [SerializeField]
-    private Vector2 blockSize = new Vector2(10f, 10f); //Taille des blocs 
+    private Vector2 _blockSize = new Vector2(10f, 10f); //Taille des blocs 
     [SerializeField]
-    private int rows = 10; // Nombre de lignes
+    private int _rows = 10; // Nombre de lignes
     [SerializeField]
-    private int columns = 10; // Nombre de colonnes
+    private int _columns = 10; // Nombre de colonnes
     [SerializeField]
     private GameObject _entreChoisi; // Entré choisi par l'utilisateur
     [SerializeField]
     private GameObject _sortiChoisi; // Entré choisi par l'utilisateur
-    private List<GameObject> allBlock = new List<GameObject>(); // List de tous les bloc instancié
+    private List<GameObject> _allBlock = new List<GameObject>(); // List de tous les bloc instancié
     [SerializeField]
     private List<GameObject> _lstEntre; // Liste de toute les entré et sorti possible
     [SerializeField]
@@ -79,78 +85,80 @@ public class RandomGeneration : MonoBehaviour
     private GameObject _btnPrefab; // prefab du button
 
     [SerializeField]
-    private ManagerUI managerUI;
+    private ManagerUI _managerUI;
     #endregion
 
     public bool MapCree { get => _mapCree; private set => _mapCree = value; }
-    public List<GameObject> LstEntre { get => _lstEntre; set => _lstEntre = value; }
+    public List<GameObject> LstEntre { get => LstEntre1; set => LstEntre1 = value; }
+    public bool Pause { get => _pause; set => _pause = value; }
+    public Transform FolderBlocParent { get => _folderBlocParent; set => _folderBlocParent = value; }
+    public Transform FolderIaParent { get => _folderIaParent; set => _folderIaParent = value; }
+    public Canvas Canvas { get => _canvas; set => _canvas = value; }
+    public List<GameObject> LstBlockMaze { get => _lstBlockMaze; set => _lstBlockMaze = value; }
+    public GameObject BlockEnter { get => _blockEnter; set => _blockEnter = value; }
+    public GameObject BlockExit { get => _blockExit; set => _blockExit = value; }
+    public GameObject BlocSensUnique { get => _blocSensUnique; set => _blocSensUnique = value; }
+    public GameObject BlocFermer { get => _blocFermer; set => _blocFermer = value; }
+    public List<float> LstRotationBlock { get => _lstRotationBlock; set => _lstRotationBlock = value; }
+    public Vector2 TerrainSize { get => _terrainSize; set => _terrainSize = value; }
+    public Vector2 BlockSize { get => _blockSize; set => _blockSize = value; }
+    public int Rows { get => _rows; set => _rows = value; }
+    public int Columns { get => _columns; set => _columns = value; }
+    public GameObject EntreChoisi { get => _entreChoisi; set => _entreChoisi = value; }
+    public GameObject SortiChoisi { get => _sortiChoisi; set => _sortiChoisi = value; }
+    public List<GameObject> AllBlock { get => _allBlock; set => _allBlock = value; }
+    public List<GameObject> LstEntre1 { get => _lstEntre; set => _lstEntre = value; }
+    public List<GameObject> LstAllBlocNotConnected { get => _lstAllBlocNotConnected; set => _lstAllBlocNotConnected = value; }
+    public GameObject BtnPrefab { get => _btnPrefab; set => _btnPrefab = value; }
+    public ManagerUI ManagerUI { get => _managerUI; set => _managerUI = value; }
 
-
-    // public static generation instance;
-
-    // void Awake()
-    // {
-    //     instance = this;
-    // }
 
     void Start()
     {
         // Au start de la scene
 
-        folderIaParent = GameObject.FindWithTag("IA").transform;
-
-        Debug.Log(" random Gen player : " + PlayerPrefs.HasKey("nameMap"));
-
-        if (PlayerPrefs.HasKey("nameMap"))
-        {
-            managerUI.SetTexBoxText("Map télécharger");
-            PlayerPrefs.DeleteKey("nameMap");
-
-        }
-        else
-        {
-
-
-            StartCoroutine(generationMap());
-        }
-
+        FolderIaParent = GameObject.FindWithTag("IA").transform;
 
 
     }
 
-    IEnumerator generationMap()
+    public void StartGeneation()
     {
-        managerUI.BtnStart.gameObject.SetActive(false);
-        managerUI.BtnRestartGenerator.enabled = false;
-        managerUI.BtnRestartGenerator.gameObject.SetActive(false);
-        managerUI.BtnSave.gameObject.SetActive(false);
+        StartCoroutine(GenerationMap());
+    }
+    IEnumerator GenerationMap()
+    {
+        ManagerUI.BtnStart.gameObject.SetActive(false);
+        ManagerUI.BtnRestartGenerator.enabled = false;
+        ManagerUI.BtnRestartGenerator.gameObject.SetActive(false);
+        ManagerUI.BtnSave.gameObject.SetActive(false);
 
-        managerUI.SetTexBoxText("Génération en cours...");
+        ManagerUI.SetTexBoxText("Génération en cours...");
 
-        float nbBlocTotal = rows * columns;
+        float nbBlocTotal = Rows * Columns;
         float numeroBloc = 0;
 
         // Position de départ des blocs
-        float startX = -(terrainSize.x / 2) + (blockSize.x / 2);
-        float startZ = -(terrainSize.y / 2) + (blockSize.y / 2);
-        allBlock = new List<GameObject>();
+        float startX = -(TerrainSize.x / 2) + (BlockSize.x / 2);
+        float startZ = -(TerrainSize.y / 2) + (BlockSize.y / 2);
+        AllBlock = new List<GameObject>();
         LstEntre = new List<GameObject>();
 
         GameObject previousBlock = null;
         int nbTentative = 0;
 
-        for (int row = 0; row < rows; row++)
+        for (int row = 0; row < Rows; row++)
         {
-            for (int col = 0; col < columns; col++)
+            for (int col = 0; col < Columns; col++)
             {
-               
+
 
                 bool blockGood = false;
                 while (!blockGood)
                 {
                     nbTentative++;
-                    float x = startX + col * blockSize.x;
-                    float z = startZ + row * blockSize.y;
+                    float x = startX + col * BlockSize.x;
+                    float z = startZ + row * BlockSize.y;
                     Vector3 position = new Vector3(x, 0f, z);
                     GameObject block;
                     List<GameObject> lstConnecteur = new List<GameObject>();
@@ -162,10 +170,10 @@ public class RandomGeneration : MonoBehaviour
                         List<string> listString = new List<string>();
 
                         // On instancie le nous block qui va �tre ajout� 
-                        GameObject selectedRoadBlockPrefab = _lstBlockMaze[UnityEngine.Random.Range(0, _lstBlockMaze.Count)];
+                        GameObject selectedRoadBlockPrefab = LstBlockMaze[UnityEngine.Random.Range(0, LstBlockMaze.Count)];
                         block = Instantiate(selectedRoadBlockPrefab, position, Quaternion.identity);
-                        block.transform.parent = folderBlocParent;
-                        block.transform.Rotate(0f, _lstRotationBlock[UnityEngine.Random.Range(0, _lstRotationBlock.Count)], 0f);
+                        block.transform.parent = FolderBlocParent;
+                        block.transform.Rotate(0f, LstRotationBlock[UnityEngine.Random.Range(0, LstRotationBlock.Count)], 0f);
                         block.name = block.name + "_Row:" + row + "_Col:" + col;
 
                         // Pause de 0.02 seconde pour que les connections ont le temps de s'être faite 
@@ -213,10 +221,10 @@ public class RandomGeneration : MonoBehaviour
                     else
                     {
                         // Connecter le point de sortie du bloc à un point de sortie en dehors de la zone de jeu
-                        GameObject selectedRoadBlockPrefab = _lstBlockMaze[0];
+                        GameObject selectedRoadBlockPrefab = LstBlockMaze[0];
                         block = Instantiate(selectedRoadBlockPrefab, position, Quaternion.identity);
                         block.transform.Rotate(0f, 90f, 0f);
-                        block.transform.parent = folderBlocParent;
+                        block.transform.parent = FolderBlocParent;
                         block.name = block.name + "_" + row + "_" + col + " FIRST";
                         previousBlock = block;
                         blockGood = true;
@@ -226,8 +234,8 @@ public class RandomGeneration : MonoBehaviour
 
                 }
 
-                 numeroBloc++;       
-                 managerUI.SetTexBoxText("Génération en cours : " + (numeroBloc / nbBlocTotal * 100f) + "%");
+                numeroBloc++;
+                ManagerUI.SetTexBoxText("Génération en cours : " + (numeroBloc / nbBlocTotal * 100f) + "%");
             }
 
         }
@@ -240,8 +248,8 @@ public class RandomGeneration : MonoBehaviour
         GetAllBlocNotConnected();
 
         generateBtnEnter();
-        managerUI.BtnRestartGenerator.enabled = true;
-        managerUI.BtnRestartGenerator.gameObject.SetActive(true);
+        ManagerUI.BtnRestartGenerator.enabled = true;
+        ManagerUI.BtnRestartGenerator.gameObject.SetActive(true);
 
         print("La map a été générer !");
     }
@@ -249,11 +257,11 @@ public class RandomGeneration : MonoBehaviour
     // Fonctions qui ajoute tous les blocs de la map dans la liste AllBlock
     public void AddAllBlocFromMaze()
     {
-        int nombreEnfants = folderBlocParent.childCount;
+        int nombreEnfants = FolderBlocParent.childCount;
         for (int i = 0; i < nombreEnfants; i++)
         {
-            Transform enfant = folderBlocParent.GetChild(i);
-            allBlock.Add(enfant.gameObject);
+            Transform enfant = FolderBlocParent.GetChild(i);
+            AllBlock.Add(enfant.gameObject);
         }
     }
 
@@ -275,26 +283,26 @@ public class RandomGeneration : MonoBehaviour
     public void GetAllBlocNotConnected()
     {
         LstEntre.Clear();
-        _lstAllBlocNotConnected.Clear();
-        for (int i = 0; i < allBlock.Count; i++)
+        LstAllBlocNotConnected.Clear();
+        for (int i = 0; i < AllBlock.Count; i++)
         {
-            int childCount = allBlock[i].transform.childCount;
+            int childCount = AllBlock[i].transform.childCount;
             for (int y = 0; y < childCount; y++)
             {
-                Transform child = allBlock[i].transform.GetChild(y);
+                Transform child = AllBlock[i].transform.GetChild(y);
                 if (child.CompareTag("Connecteur"))
                 {
                     if (child.GetComponent<connecteur>().Connected == "pasConnecte")
                     {
                         LstEntre.Add(child.gameObject);
-                        _lstAllBlocNotConnected.Add(child.gameObject);
+                        LstAllBlocNotConnected.Add(child.gameObject);
                     }
                 }
                 else if (child.CompareTag("mauvais"))
                 {
                     if (child.GetComponent<connecteur>().Connected == "pasConnecte")
                     {
-                        _lstAllBlocNotConnected.Add(child.gameObject);
+                        LstAllBlocNotConnected.Add(child.gameObject);
                     }
                 }
             }
@@ -324,23 +332,23 @@ public class RandomGeneration : MonoBehaviour
     // Fonctions qui génère tous les boutons pour placer une entre
     public void generateBtnEnter()
     {
-        managerUI.SetTexBoxText("Veuillez sélectionner une entré !");
+        ManagerUI.SetTexBoxText("Veuillez sélectionner une entré !");
 
 
         int index = 0;
 
         // Créer et placer les boutons dynamiquement sur les GameObjects existants
-        foreach (GameObject targetObject in _lstEntre)
+        foreach (GameObject targetObject in LstEntre1)
         {
             index++;
             // Convertir la position du GameObject en coordonnées d'écran
             Vector3 screenPos = Camera.main.WorldToScreenPoint(targetObject.transform.position);
 
             // Instancier le bouton à partir du prefab
-            GameObject buttonGO = Instantiate(_btnPrefab, screenPos, Quaternion.identity, canvas.transform);
+            GameObject buttonGO = Instantiate(BtnPrefab, screenPos, Quaternion.identity, this.Canvas.transform);
 
             // D�finir le parent du bouton
-            buttonGO.transform.SetParent(canvas.transform, false); // Ne pas conserver la rotation et l'échelle du parent
+            buttonGO.transform.SetParent(this.Canvas.transform, false); // Ne pas conserver la rotation et l'échelle du parent
 
             Text buttonText = buttonGO.GetComponentInChildren<Text>();
             if (buttonText != null)
@@ -365,11 +373,11 @@ public class RandomGeneration : MonoBehaviour
     // Fonctions qui génère tous les boutons pour placer une sortie
     public void GenerateBtnExit()
     {
-        managerUI.SetTexBoxText("Veuillez sélectionner une sortie !");
+        ManagerUI.SetTexBoxText("Veuillez sélectionner une sortie !");
 
         int index = 0;
-        List<GameObject> _lstExit = _lstEntre;
-        _lstExit.Remove(_entreChoisi);
+        List<GameObject> _lstExit = LstEntre1;
+        _lstExit.Remove(EntreChoisi);
 
 
         foreach (GameObject targetObject in _lstExit)
@@ -379,10 +387,10 @@ public class RandomGeneration : MonoBehaviour
             Vector3 screenPos = Camera.main.WorldToScreenPoint(targetObject.transform.position);
 
             // Instancier le bouton � partir du prefab
-            GameObject buttonGO = Instantiate(_btnPrefab, screenPos, Quaternion.identity, canvas.transform);
+            GameObject buttonGO = Instantiate(BtnPrefab, screenPos, Quaternion.identity, this.Canvas.transform);
 
             // D�finir le parent du bouton
-            buttonGO.transform.SetParent(canvas.transform, false); // Ne pas conserver la rotation et l'�chelle du parent
+            buttonGO.transform.SetParent(this.Canvas.transform, false); // Ne pas conserver la rotation et l'�chelle du parent
 
             Text buttonText = buttonGO.GetComponentInChildren<Text>();
             if (buttonText != null)
@@ -409,7 +417,7 @@ public class RandomGeneration : MonoBehaviour
     public void AjouterEntre(Transform entre)
     {
         GameObject block;
-        _entreChoisi = entre.gameObject;
+        EntreChoisi = entre.gameObject;
 
         Vector3 position = new Vector3();
         float rotation = 0f;
@@ -436,9 +444,9 @@ public class RandomGeneration : MonoBehaviour
             position = entre.parent.transform.position + new Vector3(-10, 0, 0);
             rotation = -90;
         }
-        block = Instantiate(_blockEnter, position, Quaternion.identity);
-        block.name = _blockEnter.name;
-        block.transform.parent = folderBlocParent;
+        block = Instantiate(BlockEnter, position, Quaternion.identity);
+        block.name = BlockEnter.name;
+        block.transform.parent = FolderBlocParent;
         block.transform.Rotate(0f, rotation, 0f);
 
         RemoveButton();
@@ -451,14 +459,14 @@ public class RandomGeneration : MonoBehaviour
         GameObject block;
         Debug.Log(exit.gameObject.name);
 
-        List<GameObject> _lstExit = _lstEntre;
+        List<GameObject> _lstExit = LstEntre1;
 
 
-        _sortiChoisi = exit.gameObject;
+        SortiChoisi = exit.gameObject;
 
-        _lstExit.Remove(_sortiChoisi);
+        _lstExit.Remove(SortiChoisi);
 
-        this._lstEntre = _lstExit;
+        this.LstEntre1 = _lstExit;
 
         Vector3 position = new Vector3();
         float rotation = 0f;
@@ -490,9 +498,9 @@ public class RandomGeneration : MonoBehaviour
         }
 
 
-        block = Instantiate(_blockExit, position, Quaternion.identity);
-        block.transform.parent = folderBlocParent;
-        block.name = _blockExit.name;
+        block = Instantiate(BlockExit, position, Quaternion.identity);
+        block.transform.parent = FolderBlocParent;
+        block.name = BlockExit.name;
         block.transform.Rotate(0f, rotation, 0f);
 
         RemoveButton();
@@ -685,37 +693,37 @@ public class RandomGeneration : MonoBehaviour
 
         block = Instantiate(prefab, position, Quaternion.identity);
         block.name = prefab.name;
-        block.transform.parent = folderBlocParent;
+        block.transform.parent = FolderBlocParent;
         block.transform.Rotate(0f, rotation, 0f);
     }
 
     public void CompleteMap()
     {
-        managerUI.SetTexBoxText("Génération terminer ! ");
+        ManagerUI.SetTexBoxText("Génération terminer ! ");
 
 
         GetAllBlocNotConnected();
 
-        _lstAllBlocNotConnected.Remove(_sortiChoisi);
+        LstAllBlocNotConnected.Remove(SortiChoisi);
 
-        for (int i = 0; i < _lstAllBlocNotConnected.Count; i++)
+        for (int i = 0; i < LstAllBlocNotConnected.Count; i++)
         {
-            if (_lstAllBlocNotConnected[i].tag == "mauvais")
+            if (LstAllBlocNotConnected[i].tag == "mauvais")
             {
                 //  Debug.Log("On mets un bloc ferme");
-                AjouterBlocFermeture(_lstAllBlocNotConnected[i].transform, _blocFermer);
+                AjouterBlocFermeture(LstAllBlocNotConnected[i].transform, BlocFermer);
             }
             else
             {
-                AjouterBlocFermeture(_lstAllBlocNotConnected[i].transform, _blocSensUnique);
+                AjouterBlocFermeture(LstAllBlocNotConnected[i].transform, BlocSensUnique);
             }
         }
 
         Debug.Log("Map termnimé");
 
-        managerUI.BtnSave.gameObject.SetActive(true);
+        ManagerUI.BtnSave.gameObject.SetActive(true);
 
-        managerUI.SetBtnStart();
+        ManagerUI.SetBtnStart();
 
         MapCree = true;
     }
@@ -725,12 +733,12 @@ public class RandomGeneration : MonoBehaviour
     //Fonctions qui efface la carte de la scene
     public void ClearMap()
     {
-        foreach (Transform child in folderBlocParent)
+        foreach (Transform child in FolderBlocParent)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (Transform child in folderIaParent)
+        foreach (Transform child in FolderIaParent)
         {
             Destroy(child.gameObject);
         }
@@ -742,8 +750,8 @@ public class RandomGeneration : MonoBehaviour
     {
         RemoveButton();
         ClearMap();
-        managerUI.ClearInfo();
-        StartCoroutine(generationMap());
+        ManagerUI.ClearInfo();
+        StartGeneation();
 
     }
 
@@ -770,14 +778,14 @@ public class RandomGeneration : MonoBehaviour
 
     public void NoPathFound()
     {
-        managerUI.SetTexBoxText("Aucun chemin trouvé !");
-        managerUI.BtnRestartGenerator.gameObject.SetActive(true);
+        ManagerUI.SetTexBoxText("Aucun chemin trouvé !");
+        ManagerUI.BtnRestartGenerator.gameObject.SetActive(true);
     }
 
 
     public void ExitFound()
     {
-        managerUI.SetTexBoxText("Le pathFinder a trouvé la sortie !");
-        managerUI.BtnRestartGenerator.gameObject.SetActive(true);
+        ManagerUI.SetTexBoxText("Le pathFinder a trouvé la sortie !");
+        ManagerUI.BtnRestartGenerator.gameObject.SetActive(true);
     }
 }

@@ -1658,7 +1658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250b9c8238ddae4a997f5695405119d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modalWindow: {fileID: 1223820331}
+  _modalWindow: {fileID: 1223820331}
 --- !u!114 &1223820327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1727,10 +1727,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
-  pause: 0
-  folderBlocParent: {fileID: 962378303}
-  folderIaParent: {fileID: 1195344365}
-  canvas: {fileID: 1100221084}
+  _pause: 0
+  _folderBlocParent: {fileID: 962378303}
+  _folderIaParent: {fileID: 1195344365}
+  _canvas: {fileID: 1100221084}
   _lstBlockMaze:
   - {fileID: 7131183442171080694, guid: f8cbce8c026da464d83ef8fcf8194513, type: 3}
   - {fileID: 9155621975064018461, guid: 20a7e0b240e4cf3499eacee67fffe86e, type: 3}
@@ -1745,16 +1745,16 @@ MonoBehaviour:
   - 90
   - 180
   - 270
-  terrainSize: {x: 100, y: 100}
-  blockSize: {x: 10, y: 10}
-  rows: 10
-  columns: 10
+  _terrainSize: {x: 100, y: 100}
+  _blockSize: {x: 10, y: 10}
+  _rows: 10
+  _columns: 10
   _entreChoisi: {fileID: 0}
   _sortiChoisi: {fileID: 0}
   _lstEntre: []
   _lstAllBlocNotConnected: []
   _btnPrefab: {fileID: 3619394338316572125, guid: 979eb2b8a4a22e647a1a97f224dcde08, type: 3}
-  managerUI: {fileID: 1223820329}
+  _managerUI: {fileID: 1223820329}
 --- !u!114 &1223820331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,11 +1767,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3d5346386145614eaa21ef91c5f71c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modalWindow: {fileID: 1501173640}
-  inputField: {fileID: 1131340197}
-  lblErreur: {fileID: 468343754}
-  managerUI: {fileID: 1223820329}
-  managerMap: {fileID: 1223820326}
+  _modalWindow: {fileID: 1501173640}
+  _inputField: {fileID: 1131340197}
+  _lblErreur: {fileID: 468343754}
+  _managerUI: {fileID: 1223820329}
+  _managerMap: {fileID: 1223820326}
 --- !u!1 &1255064742
 GameObject:
   m_ObjectHideFlags: 0

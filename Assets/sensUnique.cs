@@ -29,11 +29,6 @@ public class sensUnique : MonoBehaviour
             other.gameObject.GetComponent<pathfinding2>().BlockPathfinder();
 
             other.gameObject.GetComponent<TrailRenderer>().material = _material;
-            
-
-
-
-
         }
     }
 }

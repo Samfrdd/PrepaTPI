@@ -20,7 +20,6 @@ public class loadMap : MonoBehaviour
     [SerializeField]
     private Transform folderBlocParent;
 
-    private string nameMap;
 
     //manager.instance.LoadMap("Map_20240213144955.xml");
 
@@ -31,10 +30,7 @@ public class loadMap : MonoBehaviour
 
         if (PlayerPrefs.HasKey("nameMap"))
         {
-            nameMap = PlayerPrefs.GetString("nameMap"); // Récupérez le paramètre de PlayerPrefs
-            Debug.Log("Paramètre récupéré : " + nameMap);
-            MapData _mapToLoad = manager.LoadMap(nameMap);
-            GenerateMapFromSave(_mapToLoad.blocks);
+          
             // Faites ce que vous devez faire avec le paramètre
         }
         else
@@ -53,7 +49,7 @@ public class loadMap : MonoBehaviour
         foreach (BlocData blockData in map)
         {
             GameObject desiredElement;
-            string fullString = blockData.type;
+            string fullString = blockData.Type;
             string[] parts = fullString.Split('('); // Diviser la chaîne en fonction de '('
             string extractedString = parts[0]; // Prendre la première partie
 
@@ -62,7 +58,7 @@ public class loadMap : MonoBehaviour
             desiredElement = _lstBlockMaze.Find(item => item.name == extractedString);
             // Debug.Log(extractedString);
 
-            GameObject block = Instantiate(desiredElement, blockData.position, blockData.rotation);
+            GameObject block = Instantiate(desiredElement, blockData.Position, blockData.Rotation);
 
             block.transform.parent = folderBlocParent;
         }

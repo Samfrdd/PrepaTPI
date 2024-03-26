@@ -9,7 +9,14 @@ using UnityEngine;
 [Serializable]
 public class MapData 
 {
-   public List<BlocData> blocks = new List<BlocData>();
+   private List<BlocData> _blocks = new List<BlocData>();
+
+   public List<BlocData> Blocks { get => _blocks;private set => _blocks = value; }
+
+
+   public void AddBlockData(BlocData bloc){
+      Blocks.Add(bloc);
+   }
 }
 
 

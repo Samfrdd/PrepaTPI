@@ -18,33 +18,39 @@ using Unity.VisualScripting;
 public class ModalWindowSave : MonoBehaviour
 {
     [SerializeField]
-    private GameObject modalWindow;
+    private GameObject _modalWindow;
     [SerializeField]
-    private GameObject inputField;
+    private GameObject _inputField;
 
     [SerializeField]
-    private GameObject lblErreur;
+    private GameObject _lblErreur;
     [SerializeField]
-    private ManagerUI managerUI;
+    private ManagerUI _managerUI;
 
     [SerializeField]
-    private MapManager managerMap;
+    private MapManager _managerMap;
+
+    public GameObject ModalWindow { get => _modalWindow; set => _modalWindow = value; }
+    public GameObject InputField { get => _inputField; set => _inputField = value; }
+    public GameObject LblErreur { get => _lblErreur; set => _lblErreur = value; }
+    public ManagerUI ManagerUI { get => _managerUI; set => _managerUI = value; }
+    public MapManager ManagerMap { get => _managerMap; set => _managerMap = value; }
 
     public void OpenModal()
     {
-        modalWindow.SetActive(true);
-        lblErreur.SetActive(false);
+        ModalWindow.SetActive(true);
+        LblErreur.SetActive(false);
 
     }
 
     public void CloseModal()
     {
-        modalWindow.SetActive(false);
+        ModalWindow.SetActive(false);
     }
 
     public void ValidateInput()
     {
-        string userInput = inputField.GetComponent<InputField>().text;
+        string userInput = this.InputField.GetComponent<InputField>().text;
         Debug.Log("Input validé : " + userInput);
         // Ici, vous pouvez traiter ou utiliser la valeur entrée par l'utilisateur
         string folderPath = Application.persistentDataPath + "/Maps/"; ;
@@ -55,7 +61,7 @@ public class ModalWindowSave : MonoBehaviour
 
         if (userInput == "")
         {
-            mapName = managerMap.GenerateUniqueMapName();
+            mapName = ManagerMap.GenerateUniqueMapName();
         }
         else
         {
@@ -78,18 +84,18 @@ public class ModalWindowSave : MonoBehaviour
 
         if (nameValide)
         {
-            managerMap.AddBlocksToMapData(mapData);
+            ManagerMap.AddBlocksToMapData(mapData);
             // Sauvegardez la carte
-            managerMap.SaveMap(mapName, mapData);
+            ManagerMap.SaveMap(mapName, mapData);
 
-            StartCoroutine(managerUI.MapSavedConfirmed());
+            StartCoroutine(ManagerUI.MapSavedConfirmed());
 
             CloseModal(); // Fermez la fenêtre modale après la validationF
         }
         else
         {
             // Erreur nom pas valide ou deja existant
-            lblErreur.SetActive(true);
+            LblErreur.SetActive(true);
         }
 
 

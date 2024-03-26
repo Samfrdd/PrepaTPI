@@ -24,11 +24,12 @@ public class ManagerUI : MonoBehaviour
 
     [SerializeField]
     private GameObject _lblConfirmationSave; // textbox qui est en haut de la scene
-    
+
     [SerializeField]
     private GameObject _infoPathfinder; // textbox qui est en haut de la scene
 
     private int _nbPathfinder;
+
 
     public Button BtnRestartGenerator { get => _btnRestartGenerator; set => _btnRestartGenerator = value; }
     public GameObject BtnPrefab { get => _btnPrefab; set => _btnPrefab = value; }
@@ -37,9 +38,29 @@ public class ManagerUI : MonoBehaviour
     public GameObject TextBox { get => _textBox; set => _textBox = value; }
     public GameObject InfoPathfinder { get => _infoPathfinder; set => _infoPathfinder = value; }
     public int NbPathfinder { get => _nbPathfinder; set => _nbPathfinder = value; }
+    public GameObject LblConfirmationSave { get => _lblConfirmationSave; set => _lblConfirmationSave = value; }
 
     // Start is called before the first frame update
 
+
+    public void Start()
+    {
+        Debug.Log(" random Gen player : " + PlayerPrefs.HasKey("nameMap"));
+
+        if (PlayerPrefs.HasKey("nameMap"))
+        {
+            string nameMap = PlayerPrefs.GetString("nameMap"); // Récupérez le paramètre de PlayerPrefs
+            Debug.Log("Paramètre récupéré : " + nameMap);
+            MapData _mapToLoad = gameObject.GetComponent<MapManager>().LoadMap(nameMap);
+            gameObject.GetComponent<loadMap>().GenerateMapFromSave(_mapToLoad.Blocks);
+            SetTexBoxText("Map telechargé : " + nameMap);
+            PlayerPrefs.DeleteKey("nameMap");
+        }
+        else
+        {
+            gameObject.GetComponent<RandomGeneration>().StartGeneation();
+        }
+    }
     public void UpdateView()
     {
         InfoPathfinder.GetComponent<Text>().text = " Nombre de pathfinder : " + _nbPathfinder;
@@ -71,10 +92,10 @@ public class ManagerUI : MonoBehaviour
 
     public IEnumerator MapSavedConfirmed()
     {
-        _lblConfirmationSave.SetActive(true);
+        LblConfirmationSave.SetActive(true);
         RemoveButtonSave();
         yield return new WaitForSeconds(5f);
-        _lblConfirmationSave.SetActive(false);
+        LblConfirmationSave.SetActive(false);
 
     }
 
@@ -85,8 +106,8 @@ public class ManagerUI : MonoBehaviour
 
     public void SetBtnStart()
     {
-        _btnStart.onClick.RemoveAllListeners();
-        _btnStart.onClick.AddListener(() => GameObject.FindWithTag("Enter").GetComponent<Enter2_PathfinderNewDirection>().StartPathfinder());
-        _btnStart.gameObject.SetActive(true);
+        BtnStart.onClick.RemoveAllListeners();
+        BtnStart.onClick.AddListener(() => GameObject.FindWithTag("Enter").GetComponent<Enter2_PathfinderNewDirection>().StartPathfinder());
+        BtnStart.gameObject.SetActive(true);
     }
 }
