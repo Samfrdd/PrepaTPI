@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class BoutonGenerer : MonoBehaviour
 {
-    private const string sceneName = "generationMap"; // Le nom de la scène vers laquelle vous souhaitez changer
+    private const string SceneName = "generationMap"; // Le nom de la scï¿½ne vers laquelle vous souhaitez changer
 
     public void ChangeScene()
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(SceneName);
     }
 }

@@ -17,10 +17,6 @@ public class Enterrrrrrr : MonoBehaviour
     [SerializeField]
     private GameObject _prefabParent;
 
-
-
-
-
     private bool isStarted = false;
     // Start is called before the first frame update
 

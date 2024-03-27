@@ -13,30 +13,33 @@ public class Enter2_PathfinderNewDirection : MonoBehaviour
     [SerializeField]
     private GameObject _gameManager;
 
-    private bool isStarted = false;
+
+    public GameObject PrefabPathfinder { get => _prefabPathfinder; set => _prefabPathfinder = value; }
+    public GameObject PrefabParent { get => _prefabParent; set => _prefabParent = value; }
+    public GameObject GameManager { get => _gameManager; set => _gameManager = value; }
+
     // Start is called before the first frame update
 
     void Start()
     {
 
-        _prefabParent = GameObject.FindWithTag("IA");
-        _gameManager = GameObject.FindWithTag("gameManager");
-        _prefabParent = GameObject.FindWithTag("IA");
+        PrefabParent = GameObject.FindWithTag("IA");
+        GameManager = GameObject.FindWithTag("gameManager");
+        PrefabParent = GameObject.FindWithTag("IA");
     }
 
     public void StartPathfinder()
     {
-        isStarted = true;
         SpawnPathfinder();
-        _gameManager.GetComponent<ManagerUI>().RemoveButtonGeneration();
-        _gameManager.GetComponent<ManagerUI>().RemoveButtonSave();
-        _gameManager.GetComponent<ManagerUI>().RemoveButtonStart();
+        GameManager.GetComponent<ManagerUI>().RemoveButtonGeneration();
+        GameManager.GetComponent<ManagerUI>().RemoveButtonSave();
+        GameManager.GetComponent<ManagerUI>().RemoveButtonStart();
     }
     // Update is called once per frame
     public void SpawnPathfinder()
     {
-        GameObject pathfinder = Instantiate(_prefabPathfinder, transform.position, transform.rotation);
-        pathfinder.transform.parent = _prefabParent.transform;
+        GameObject pathfinder = Instantiate(PrefabPathfinder, transform.position, transform.rotation);
+        pathfinder.transform.parent = PrefabParent.transform;
         pathfinder.GetComponent<Pathfinding1>().SetOriginal(true);
 
     }

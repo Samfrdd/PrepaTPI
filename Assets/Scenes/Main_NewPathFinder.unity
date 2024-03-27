@@ -1683,8 +1683,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb3c310b5c361a34a9a6704d981cc3e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 1223820326}
-  managerUI: {fileID: 1223820329}
+  _mapManager: {fileID: 1223820326}
+  _managerUI: {fileID: 1223820329}
   _lstBlockMaze:
   - {fileID: 7131183442171080694, guid: f8cbce8c026da464d83ef8fcf8194513, type: 3}
   - {fileID: 6329817584068821223, guid: 35e1c1f6c36603b4eaf3376d966716c0, type: 3}
@@ -1694,7 +1694,7 @@ MonoBehaviour:
   - {fileID: 1216902840000221477, guid: 9e84f172de4bd43459716b442107f471, type: 3}
   - {fileID: 8016794016125995863, guid: 218aaa6e6a1477449b6493deb31e9bfb, type: 3}
   - {fileID: 8398550198939848211, guid: c3b14fed85722c6459f44f1e1804eb78, type: 3}
-  folderBlocParent: {fileID: 962378303}
+  _folderBlocParent: {fileID: 962378303}
 --- !u!114 &1223820329
 MonoBehaviour:
   m_ObjectHideFlags: 0

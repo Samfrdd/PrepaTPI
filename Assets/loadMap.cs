@@ -9,16 +9,21 @@ using UnityEngine;
 public class loadMap : MonoBehaviour
 {
     [SerializeField]
-    private MapManager manager;
+    private MapManager _mapManager;
 
     [SerializeField]
-    private ManagerUI managerUI;
+    private ManagerUI _managerUI;
 
     [SerializeField]
     private List<GameObject> _lstBlockMaze;
 
     [SerializeField]
-    private Transform folderBlocParent;
+    private Transform _folderBlocParent;
+
+    public MapManager MapManager { get => _mapManager;private set => _mapManager = value; }
+    public ManagerUI ManagerUI { get => _managerUI;private set => _managerUI = value; }
+    public List<GameObject> LstBlockMaze { get => _lstBlockMaze;private set => _lstBlockMaze = value; }
+    public Transform FolderBlocParent { get => _folderBlocParent;private set => _folderBlocParent = value; }
 
 
     //manager.instance.LoadMap("Map_20240213144955.xml");
@@ -45,7 +50,6 @@ public class loadMap : MonoBehaviour
 
     public void GenerateMapFromSave(List<BlocData> map)
     {
-
         foreach (BlocData blockData in map)
         {
             GameObject desiredElement;
@@ -55,15 +59,15 @@ public class loadMap : MonoBehaviour
 
 
 
-            desiredElement = _lstBlockMaze.Find(item => item.name == extractedString);
+            desiredElement = LstBlockMaze.Find(item => item.name == extractedString);
             // Debug.Log(extractedString);
 
             GameObject block = Instantiate(desiredElement, blockData.Position, blockData.Rotation);
 
-            block.transform.parent = folderBlocParent;
+            block.transform.parent = FolderBlocParent;
         }
 
-        managerUI.SetBtnStart();
+        ManagerUI.SetBtnStart();
     }
 
 }

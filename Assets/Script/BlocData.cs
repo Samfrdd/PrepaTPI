@@ -15,12 +15,12 @@ public class BlocData
     private string _type;
 
 
-    // Propriétés avec setters privés et attributs XML pour la sérialisation
-    [XmlElement("Position")]
+    // Pas de private set car la methode de sérialization demande a acceder au variable et a les modifiers
+
     public Vector3 Position { get => _position;  set => _position = value; }
-    [XmlElement("Rotation")]
+
     public Quaternion Rotation { get => _rotation;  set => _rotation = value; }
-    [XmlElement("Type")]
+
     public string Type { get => _type;  set => _type = value; }
 
 

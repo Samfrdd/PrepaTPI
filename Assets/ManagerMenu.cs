@@ -12,24 +12,29 @@ public class ManagerMenu : MonoBehaviour
     [SerializeField]
     private GameObject _loadWindows;
         [SerializeField]
-    private GameObject loadContent;
+    private GameObject _loadContent;
+
+    public GameObject MainWindows { get => _mainWindows;private set => _mainWindows = value; }
+    public GameObject MainContent { get => _mainContent;private set => _mainContent = value; }
+    public GameObject LoadWindows { get => _loadWindows;private set => _loadWindows = value; }
+    public GameObject LoadContent { get => _loadContent;private set => _loadContent = value; }
 
     private void Start() {
-        _mainWindows.SetActive(true);
-        _loadWindows.SetActive(true);
+        MainWindows.SetActive(true);
+        LoadWindows.SetActive(true);
 
 
-        _mainContent.SetActive(true);
-        loadContent.SetActive(false);
+        MainContent.SetActive(true);
+        LoadContent.SetActive(false);
     }
 
     public void AfficherLoadList(){
-        _mainContent.SetActive(false);
-        loadContent.SetActive(true);
+        MainContent.SetActive(false);
+        LoadContent.SetActive(true);
     }
 
         public void AfficherMain(){
-        _mainContent.SetActive(true);
-        loadContent.SetActive(false);
+        MainContent.SetActive(true);
+        LoadContent.SetActive(false);
     }
 }

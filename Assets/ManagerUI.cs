@@ -52,6 +52,7 @@ public class ManagerUI : MonoBehaviour
             string nameMap = PlayerPrefs.GetString("nameMap"); // Récupérez le paramètre de PlayerPrefs
             Debug.Log("Paramètre récupéré : " + nameMap);
             MapData _mapToLoad = gameObject.GetComponent<MapManager>().LoadMap(nameMap);
+            Debug.Log(_mapToLoad);
             gameObject.GetComponent<loadMap>().GenerateMapFromSave(_mapToLoad.Blocks);
             SetTexBoxText("Map telechargé : " + nameMap);
             PlayerPrefs.DeleteKey("nameMap");

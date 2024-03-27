@@ -17,7 +17,11 @@ public class Enter : MonoBehaviour
     [SerializeField]
     private GameObject _prefabParent;
 
-    private bool isStarted = false;
+
+
+
+
+
     // Start is called before the first frame update
 
     void Start()
@@ -34,7 +38,7 @@ public class Enter : MonoBehaviour
 
     public void StartPathfinder()
     {
-        isStarted = true;
+ 
         SpawnPathfinder();
         _gameManager.GetComponent<ManagerUI>().RemoveButtonGeneration();
         _gameManager.GetComponent<ManagerUI>().RemoveButtonSave();

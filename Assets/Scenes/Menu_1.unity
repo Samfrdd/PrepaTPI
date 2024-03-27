@@ -1169,7 +1169,7 @@ MonoBehaviour:
   _mainWindows: {fileID: 1673295969}
   _mainContent: {fileID: 1439369591}
   _loadWindows: {fileID: 1583099398}
-  loadContent: {fileID: 1590581039}
+  _loadContent: {fileID: 1590581039}
 --- !u!114 &1618235718
 MonoBehaviour:
   m_ObjectHideFlags: 0

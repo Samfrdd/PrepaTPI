@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distance: 0
-  layerMask:
+  _layerMask:
     serializedVersion: 2
     m_Bits: 64
-  color: 2
-  valeurBit: 2
+  _color: 2
+  _valeurBit: 2
 --- !u!1 &3308810342875934836
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,11 +378,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distance: 0
-  layerMask:
+  _layerMask:
     serializedVersion: 2
     m_Bits: 64
-  color: 1
-  valeurBit: 1
+  _color: 1
+  _valeurBit: 1
 --- !u!1 &7378056280313242697
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,8 +428,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distance: 0
-  layerMask:
+  _layerMask:
     serializedVersion: 2
     m_Bits: 64
-  color: 3
-  valeurBit: 4
+  _color: 3
+  _valeurBit: 4
