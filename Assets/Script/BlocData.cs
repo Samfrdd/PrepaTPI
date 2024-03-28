@@ -1,3 +1,14 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description. BlockData.cs. Class et script qui me permets de stocké dans une liste de BlockData les informations de la carte.
+Ces informations sont ensuite stocké dans un fichier XML
+Serializable class
+version 1.0
+***********************************************************************
+*/
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
