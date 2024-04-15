@@ -1,3 +1,12 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description : MapData.cs est une classe Serializable qui nous permets de stocké une list de BlockData pour ensuite générer une carte entière
+version 1.0
+***********************************************************************
+*/
+
 using System;
 using System.Collections;
 using System.Collections.Generic;

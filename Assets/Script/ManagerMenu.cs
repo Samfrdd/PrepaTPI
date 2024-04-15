@@ -1,3 +1,13 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description : ManagerMenu.cs permets de gérer l'affichage du menu
+version 1.0
+***********************************************************************
+*/
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -1,3 +1,12 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description : loadMap.cs ce script permet de charger les cartes sauvegarder
+version 1.0
+***********************************************************************
+*/
+
 
 using System;
 using System.Collections.Generic;
@@ -6,7 +15,7 @@ using System.Xml.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class loadMap : MonoBehaviour
+public class LoadMap : MonoBehaviour
 {
     [SerializeField]
     private MapManager _mapManager;

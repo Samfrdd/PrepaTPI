@@ -1,3 +1,12 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description : ManagerScene.cs permets de manager tous l'affichage de notre scene
+version 1.0
+***********************************************************************
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +62,7 @@ public class ManagerUI : MonoBehaviour
             Debug.Log("Paramètre récupéré : " + nameMap);
             MapData _mapToLoad = gameObject.GetComponent<MapManager>().LoadMap(nameMap);
             Debug.Log(_mapToLoad);
-            gameObject.GetComponent<loadMap>().GenerateMapFromSave(_mapToLoad.Blocks);
+            gameObject.GetComponent<LoadMap>().GenerateMapFromSave(_mapToLoad.Blocks);
             SetTexBoxText("Map telechargé : " + nameMap);
             PlayerPrefs.DeleteKey("nameMap");
         }

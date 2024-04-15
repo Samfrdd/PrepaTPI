@@ -2,7 +2,7 @@
 ***********************************************************************
 Auteur : Sam Freddi
 Date : 26.03.2024
-Description. BoutonGenerer.cs CLass qui me permets de changer de scene
+Description : CheckAlreadyPass.cs se place sur les blocs de la carte et note le premier pathfinder qui est venu
 version 1.0
 ***********************************************************************
 */

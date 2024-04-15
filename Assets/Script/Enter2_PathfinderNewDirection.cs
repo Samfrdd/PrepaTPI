@@ -1,7 +1,10 @@
-/**
-
-
-
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description : Enter2_PathfinderNewDirection.cs script du début de l'algorithm pour faire apparaître le premier pathfinder 
+version 1.0
+***********************************************************************
 */
 
 using System.Collections;
@@ -28,7 +31,6 @@ public class Enter2_PathfinderNewDirection : MonoBehaviour
 
     void Start()
     {
-
         PrefabParent = GameObject.FindWithTag("IA");
         GameManager = GameObject.FindWithTag("gameManager");
         PrefabParent = GameObject.FindWithTag("IA");

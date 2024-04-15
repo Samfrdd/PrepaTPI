@@ -1,3 +1,12 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description : Exit.cs script qui ce place sur le bloc de sortie. Si un pathfinder rentre en contact avec lui cela signifie que nous avons trouvé une sortie possible
+version 1.0
+***********************************************************************
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -2,7 +2,7 @@
 ***********************************************************************
 Auteur : Sam Freddi
 Date : 26.03.2024
-Description. RandomGeneration.cs
+Description. RandomGeneration.cs sctipt de génération de la carte. Génération visuel
 version 1.0
 ***********************************************************************
 */

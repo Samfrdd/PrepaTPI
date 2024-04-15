@@ -1,3 +1,12 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description : ModalWindowSave.cs ce script gère la fenêtre modal pour sauvegarder la carte
+version 1.0
+***********************************************************************
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,3 +1,12 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description. RayCastScript.cs nous donne les valeur du raycast et les donne au pathfinder
+version 1.0
+***********************************************************************
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;

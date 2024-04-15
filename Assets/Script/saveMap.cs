@@ -1,3 +1,12 @@
+/** 
+***********************************************************************
+Auteur : Sam Freddi
+Date : 26.03.2024
+Description. MapManager.cs gère toute la sauvegarder de la map et son chargement
+version 1.0
+***********************************************************************
+*/
+
 
 using System;
 using System.Collections.Generic;
