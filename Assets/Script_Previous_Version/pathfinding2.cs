@@ -63,13 +63,13 @@ public class pathfinding2 : MonoBehaviour
         if (_isOriginal && _blocked && !_noPathFound)
         {
             _noPathFound = true;
-            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().NoPathFound();
+          //  GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().NoPathFound();
         }
 
         if (_isOriginal && _trouve && !algoFinished)
         {
             algoFinished = true;
-            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().ExitFound();
+          //  GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().ExitFound();
         }
 
     }

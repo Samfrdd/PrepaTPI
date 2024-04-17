@@ -5,7 +5,7 @@ using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using static Unity.VisualScripting.Metadata;
+
 using Button = UnityEngine.UI.Button;
 
 public class generation : MonoBehaviour

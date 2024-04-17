@@ -38,10 +38,17 @@ public class Enter2_PathfinderNewDirection : MonoBehaviour
 
     public void StartPathfinder()
     {
+        GameManager.GetComponent<ManagerUI>().ClearMapInfo();
+        GameManager.GetComponent<ManagerUI>().ClearAllPathinder();
+        GameManager.GetComponent<ManagerUI>().SetTexBoxText("Pathfinder en cours de recherche...");
         SpawnPathfinder();
         GameManager.GetComponent<ManagerUI>().RemoveButtonGeneration();
         GameManager.GetComponent<ManagerUI>().RemoveButtonSave();
         GameManager.GetComponent<ManagerUI>().RemoveButtonStart();
+        GameManager.GetComponent<ManagerUI>().StartTimer();
+        GameManager.GetComponent<ManagerUI>().SetBtnPause(true);
+
+
     }
     // Update is called once per frame
     public void SpawnPathfinder()

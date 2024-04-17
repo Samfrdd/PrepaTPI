@@ -116,4 +116,6 @@ public class MapManager : MonoBehaviour
             return (MapData)serializer.Deserialize(streamReader);
         }
     }
+
+    
 }

@@ -34,4 +34,9 @@ public class CheckAlreadyPass : MonoBehaviour
             }
         }
     }
+
+
+    public void ClearInfo(){
+        Pathfinder = null;
+    }
 }

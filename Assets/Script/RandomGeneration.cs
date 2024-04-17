@@ -15,7 +15,6 @@ using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using static Unity.VisualScripting.Metadata;
 using Button = UnityEngine.UI.Button;
 
 using System;
@@ -776,16 +775,5 @@ public class RandomGeneration : MonoBehaviour
 
 
 
-    public void NoPathFound()
-    {
-        ManagerUI.SetTexBoxText("Aucun chemin trouvé !");
-        ManagerUI.BtnRestartGenerator.gameObject.SetActive(true);
-    }
 
-
-    public void ExitFound()
-    {
-        ManagerUI.SetTexBoxText("Le pathFinder a trouvé la sortie !");
-        ManagerUI.BtnRestartGenerator.gameObject.SetActive(true);
-    }
 }

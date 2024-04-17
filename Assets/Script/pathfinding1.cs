@@ -76,7 +76,7 @@ public class Pathfinding1 : MonoBehaviour
     [SerializeField]
     private bool _blockChangeState = false;
 
-
+    private ManagerUI _managerUI;
     private Vector3 _lastPosition; // Position du GameObject lors de la dernière frame
 
 
@@ -113,6 +113,7 @@ public class Pathfinding1 : MonoBehaviour
     public RayCastScript ScriptLayerFrontal { get => _scriptLayerFrontal; private set => _scriptLayerFrontal = value; }
     public RayCastScript ScriptLayerLeft { get => _scriptLayerLeft; private set => _scriptLayerLeft = value; }
     public RayCastScript ScriptLayerRight { get => _scriptLayerRight; private set => _scriptLayerRight = value; }
+    public ManagerUI ManagerUI { get => _managerUI; set => _managerUI = value; }
 
     private void Start()
     {
@@ -125,7 +126,7 @@ public class Pathfinding1 : MonoBehaviour
         DossierIA = GameObject.FindWithTag("IA");
         State = 6;
         CurrentSpeed = Speed;
-
+        ManagerUI = GameObject.FindWithTag("gameManager").gameObject.GetComponent<ManagerUI>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -201,13 +202,13 @@ public class Pathfinding1 : MonoBehaviour
         {
             NoPathFound = true;
             BlockPathfinder();
-            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().NoPathFound();
+            NoPathFoundFunction();
         }
 
         if (IsOriginal && Trouve && !AlgoFinished)
         {
             AlgoFinished = true;
-            GameObject.FindWithTag("gameManager").GetComponent<RandomGeneration>().ExitFound();
+            ExitFound();
         }
     }
 
@@ -481,5 +482,32 @@ public class Pathfinding1 : MonoBehaviour
     public void SetState(int state)
     {
         State = state;
+    }
+
+    public void NoPathFoundFunction()
+    {
+        ManagerUI.SetTexBoxText("Aucun chemin trouvé !");
+        ManagerUI.BtnRestartGenerator.gameObject.SetActive(true);
+        ManagerUI.SetBtnStart();
+        ManagerUI.SetBtnSave();
+        ManagerUI.StopTimer();
+        ManagerUI.SetBtnPause(false);
+
+    }
+
+
+    public void ExitFound()
+    {
+        ManagerUI.SetTexBoxText("Le pathFinder a trouvé la sortie !");
+        ManagerUI.BtnRestartGenerator.gameObject.SetActive(true);
+        ManagerUI.SetBtnStart();
+        ManagerUI.SetBtnSave();
+        ManagerUI.StopTimer();
+        ManagerUI.SetBtnPause(false);
+
+    }
+
+    public void ChangeSpeed(int speed){
+        Speed = speed;
     }
 }
